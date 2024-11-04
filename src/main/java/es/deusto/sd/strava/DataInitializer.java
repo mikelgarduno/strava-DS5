@@ -3,7 +3,7 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
-package es.deusto.sd.auctions;
+package es.deusto.sd.strava;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,11 +14,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import es.deusto.sd.auctions.entity.Article;
-import es.deusto.sd.auctions.entity.Category;
-import es.deusto.sd.auctions.entity.User;
-import es.deusto.sd.auctions.service.AuctionsService;
-import es.deusto.sd.auctions.service.AuthService;
+import es.deusto.sd.strava.entity.Article;
+import es.deusto.sd.strava.entity.Category;
+import es.deusto.sd.strava.entity.User;
+import es.deusto.sd.strava.service.AuctionsService;
+import es.deusto.sd.strava.service.AuthService;
 
 @Configuration
 public class DataInitializer {

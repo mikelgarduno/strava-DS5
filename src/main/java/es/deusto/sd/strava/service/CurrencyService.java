@@ -1,4 +1,4 @@
-package es.deusto.sd.auctions.service;
+package es.deusto.sd.strava.service;
 
 import java.util.Optional;
 

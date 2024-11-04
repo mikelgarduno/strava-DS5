@@ -3,7 +3,7 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
-package es.deusto.sd.auctions.facade;
+package es.deusto.sd.strava.facade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.deusto.sd.auctions.dto.ArticleDTO;
-import es.deusto.sd.auctions.dto.CategoryDTO;
-import es.deusto.sd.auctions.entity.Article;
-import es.deusto.sd.auctions.entity.Category;
-import es.deusto.sd.auctions.entity.User;
-import es.deusto.sd.auctions.service.AuctionsService;
-import es.deusto.sd.auctions.service.AuthService;
-import es.deusto.sd.auctions.service.CurrencyService;
+import es.deusto.sd.strava.dto.ArticleDTO;
+import es.deusto.sd.strava.dto.CategoryDTO;
+import es.deusto.sd.strava.entity.Article;
+import es.deusto.sd.strava.entity.Category;
+import es.deusto.sd.strava.entity.User;
+import es.deusto.sd.strava.service.AuctionsService;
+import es.deusto.sd.strava.service.AuthService;
+import es.deusto.sd.strava.service.CurrencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
