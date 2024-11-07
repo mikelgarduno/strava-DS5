@@ -3,6 +3,8 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
+
+/* 
 package es.deusto.sd.strava.service;
 
 import java.util.HashMap;
@@ -76,3 +78,4 @@ public class AuctionsService {
 		}
 	}
 }
+	*/

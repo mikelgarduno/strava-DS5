@@ -7,21 +7,21 @@ import org.springframework.stereotype.Service;
 
 import es.deusto.sd.strava.entity.Entrenamiento;
 import es.deusto.sd.strava.entity.Reto;
-import es.deusto.sd.strava.entity.Usuario;
+import es.deusto.sd.strava.entity.UsuarioS;
 
 @Service
 public class StravaService {
 
-    private List<Usuario> usuarios = new ArrayList<>();
+    private List<UsuarioS> usuarios = new ArrayList<>();
     private List<Entrenamiento> entrenamientos = new ArrayList<>();
     private List<Reto> retos = new ArrayList<>();
 
-    public String registrarUsuario(Usuario usuario) {
+    public String registrarUsuario(UsuarioS usuario) {
         usuarios.add(usuario);
         return "Usuario registrado exitosamente";
     }
 
-    public List<Usuario> consultarUsuarios() {
+    public List<UsuarioS> consultarUsuarios() {
         return usuarios;
     }
 

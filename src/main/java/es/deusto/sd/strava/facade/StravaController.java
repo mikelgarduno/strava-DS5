@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.deusto.sd.strava.entity.Entrenamiento;
 import es.deusto.sd.strava.entity.Reto;
-import es.deusto.sd.strava.entity.Usuario;
+import es.deusto.sd.strava.entity.UsuarioS;
 import es.deusto.sd.strava.service.StravaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ public class StravaController {
                description = "Permite registrar un nuevo usuario en la aplicación")
     @ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente")
     @PostMapping("/usuarios")
-    public String registrarUsuario(@RequestBody Usuario usuario) {
+    public String registrarUsuario(@RequestBody UsuarioS usuario) {
         return stravaService.registrarUsuario(usuario);
     }
 
@@ -39,7 +39,7 @@ public class StravaController {
                description = "Devuelve la lista completa de usuarios registrados")
     @ApiResponse(responseCode = "200", description = "Lista de usuarios consultada exitosamente")
     @GetMapping("/usuarios")
-    public List<Usuario> consultarUsuarios() {
+    public List<UsuarioS> consultarUsuarios() {
         return stravaService.consultarUsuarios();
     }
 

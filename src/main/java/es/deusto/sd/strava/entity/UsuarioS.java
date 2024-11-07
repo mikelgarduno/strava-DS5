@@ -1,0 +1,119 @@
+package es.deusto.sd.strava.entity;
+
+import java.util.Objects;
+
+public class UsuarioS {
+    private String nombre;
+    private String email;
+    private float peso;
+    private float altura;
+    private String fechaNacimiento;
+    private int frecuenciaCardiacaMax;
+    private int frecuenciaCardiacaReposo;
+
+    public UsuarioS() {
+    }
+
+    public UsuarioS(String nombre, String email, float peso, float altura, String fechaNacimiento,
+            int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo) {
+        this.nombre = nombre;
+        this.email = email;
+        this.peso = peso;
+        this.altura = altura;
+        this.fechaNacimiento = fechaNacimiento;
+        this.frecuenciaCardiacaMax = frecuenciaCardiacaMax;
+        this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
+    }
+
+    public UsuarioS(String nombre, String email, String fechaNacimiento) {
+        this.nombre = nombre;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public float getPeso() {
+        return peso;
+    }
+
+    public void setPeso(float peso) {
+        this.peso = peso;
+    }
+
+    public float getAltura() {
+        return altura;
+    }
+
+    public void setAltura(float altura) {
+        this.altura = altura;
+    }
+
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public int getFrecuenciaCardiacaMax() {
+        return frecuenciaCardiacaMax;
+    }
+
+    public void setFrecuenciaCardiacaMax(int frecuenciaCardiacaMax) {
+        this.frecuenciaCardiacaMax = frecuenciaCardiacaMax;
+    }
+
+    public int getFrecuenciaCardiacaReposo() {
+        return frecuenciaCardiacaReposo;
+    }
+
+    public void setFrecuenciaCardiacaReposo(int frecuenciaCardiacaReposo) {
+        this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        UsuarioS usuario = (UsuarioS) o;
+        return Float.compare(usuario.peso, peso) == 0 &&
+                Float.compare(usuario.altura, altura) == 0 &&
+                nombre.equals(usuario.nombre) &&
+                email.equals(usuario.email) &&
+                fechaNacimiento.equals(usuario.fechaNacimiento) &&
+                frecuenciaCardiacaMax == usuario.frecuenciaCardiacaMax &&
+                frecuenciaCardiacaReposo == usuario.frecuenciaCardiacaReposo;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, nombre);
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                ", fechaNacimiento='" + fechaNacimiento + '\'';
+    }
+
+}

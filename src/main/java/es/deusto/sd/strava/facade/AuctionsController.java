@@ -3,7 +3,8 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
-package es.deusto.sd.strava.facade;
+/* 
+ package es.deusto.sd.strava.facade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.deusto.sd.strava.dto.ArticleDTO;
 import es.deusto.sd.strava.dto.CategoryDTO;
-import es.deusto.sd.strava.entity.Article;
-import es.deusto.sd.strava.entity.Category;
-import es.deusto.sd.strava.entity.User;
 import es.deusto.sd.strava.service.AuctionsService;
 import es.deusto.sd.strava.service.AuthService;
 import es.deusto.sd.strava.service.CurrencyService;
@@ -225,4 +223,4 @@ public class AuctionsController {
 				              article.getOwner().getNickname(),
 				              currency);
 	}
-}
+}*/

@@ -1,19 +1,26 @@
 package es.deusto.sd.strava.entity;
 
+import java.util.Objects;
+
 public class Entrenamiento {
     private String titulo;
     private String deporte;
     private float distancia;
     private int duracion;
+    private String fechaInicio;
+    private String horaInicio;
 
     public Entrenamiento() {
     }
 
-    public Entrenamiento(String titulo, String deporte, float distancia, int duracion) {
+    public Entrenamiento(String titulo, String deporte, float distancia, int duracion, String fechaInicio,
+            String horaInicio) {
         this.titulo = titulo;
         this.deporte = deporte;
         this.distancia = distancia;
         this.duracion = duracion;
+        this.fechaInicio = fechaInicio;
+        this.horaInicio = horaInicio;
     }
 
     public String getTitulo() {
@@ -48,13 +55,43 @@ public class Entrenamiento {
         this.duracion = duracion;
     }
 
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
     @Override
     public String toString() {
-        return "Entrenamiento{" +
-                "titulo='" + titulo + '\'' +
-                ", deporte='" + deporte + '\'' +
-                ", distancia=" + distancia +
-                ", duracion=" + duracion +
-                '}';
+        return "Entrenamiento [deporte=" + deporte + ", distancia=" + distancia + ", duracion=" + duracion
+                + ", fechaInicio=" + fechaInicio + ", horaInicio=" + horaInicio + ", titulo=" + titulo + "]";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Entrenamiento entrenamiento = (Entrenamiento) o;
+        return Float.compare(entrenamiento.distancia, distancia) == 0 && duracion == entrenamiento.duracion
+                && titulo.equals(entrenamiento.titulo) && deporte.equals(entrenamiento.deporte)
+                && fechaInicio.equals(entrenamiento.fechaInicio) && horaInicio.equals(entrenamiento.horaInicio);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(titulo, horaInicio);
+    }
+
 }
