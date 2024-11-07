@@ -1,8 +1,6 @@
-package es.deusto.sd.strava.entity;
+package es.deusto.sd.strava.dto;
 
-import java.util.Objects;
-
-public class Reto {
+public class RetoDTO {
     private String nombre;
     private String deporte;
     private float objetivoDistancia;
@@ -11,10 +9,10 @@ public class Reto {
     private String fechaInicio;
     private String fechaFin;
 
-    public Reto() {
+    public RetoDTO() {
     }
 
-    public Reto(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo, boolean aceptado,
+    public RetoDTO(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo, boolean aceptado,
             String fechaInicio, String fechaFin) {
         this.nombre = nombre;
         this.deporte = deporte;
@@ -79,33 +77,5 @@ public class Reto {
 
     public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Reto reto = (Reto) o;
-        return Float.compare(reto.objetivoDistancia, objetivoDistancia) == 0 && objetivoTiempo == reto.objetivoTiempo
-                && Objects.equals(nombre, reto.nombre) && Objects.equals(deporte, reto.deporte)
-                && Objects.equals(fechaInicio, reto.fechaInicio) && Objects.equals(fechaFin, reto.fechaFin);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nombre, deporte);
-    }
-
-    @Override
-    public String toString() {
-        return "Reto{" +
-                "nombre='" + nombre + '\'' +
-                ", deporte='" + deporte + '\'' +
-                ", objetivoDistancia=" + objetivoDistancia +
-                ", objetivoTiempo=" + objetivoTiempo +
-                ", aceptado=" + aceptado +
-                '}';
     }
 }

@@ -27,9 +27,15 @@ public class StravaController {
     @Autowired
     private StravaService stravaService;
 
-    @Operation(summary = "Registrar un nuevo usuario",
-               description = "Permite registrar un nuevo usuario en la aplicación")
-    @ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente")
+    @Operation(
+        summary = "Registrar un nuevo usuario",
+        description = "Permite registrar un nuevo usuario en la aplicación",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente"),
+            @ApiResponse(responseCode = "409", description = "El usuario ya existe"),
+            @ApiResponse(responseCode = "500", description = "Error interno en el servidor")
+        })
+        
     @PostMapping("/usuarios")
     public String registrarUsuario(@RequestBody UsuarioS usuario) {
         return stravaService.registrarUsuario(usuario);
@@ -76,4 +82,6 @@ public class StravaController {
             @Parameter(description = "Datos del reto a crear") @RequestBody Reto reto) {
         return stravaService.crearReto(reto);
     }
+
+
 }
