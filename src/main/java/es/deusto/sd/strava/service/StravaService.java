@@ -3,12 +3,10 @@ package es.deusto.sd.strava.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale.Category;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import es.deusto.sd.strava.dto.EntrenamientoDTO;
 import es.deusto.sd.strava.entity.Entrenamiento;
 import es.deusto.sd.strava.entity.Reto;
 import es.deusto.sd.strava.entity.Usuario;
@@ -17,7 +15,6 @@ import es.deusto.sd.strava.entity.Usuario;
 public class StravaService {
 
     private List<Usuario> usuarios = new ArrayList<>();
-    private List<Entrenamiento> entrenamientos = new ArrayList<>();
     private List<Reto> retos = new ArrayList<>();
     
 
@@ -62,7 +59,14 @@ public class StravaService {
         return "Entrenamiento creado exitosamente";
     }
 
-    public String crearReto(Reto reto) {
+    public String crearReto(Reto r) {
+        Reto reto = new Reto();
+        reto.setObjetivoDistancia(r.getObjetivoDistancia());
+        reto.setObjetivoTiempo(r.getObjetivoTiempo());
+        reto.setFechaInicio(r.getFechaInicio());
+        reto.setFechaFin(r.getFechaFin());
+        reto.setDeporte(r.getDeporte());
+        reto.setNombre(r.getNombre());
         retos.add(reto);
         return "Reto creado exitosamente";
     }
