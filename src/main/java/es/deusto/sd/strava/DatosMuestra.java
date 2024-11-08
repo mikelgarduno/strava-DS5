@@ -34,6 +34,22 @@ public class DatosMuestra {
 			stravaService.registrarUsuario(cristianoRonaldo);
 			logger.info("Usuarios registrados!");
 
+			 // Retos de muestra
+			Reto maraton = new Reto("Maratón Ciudad", "Correr", 42.195f, 300, false, "2024-01-01", "2024-01-31");
+			Reto triatlon = new Reto("Triatlón Olímpico", "Nadar-Correr-Ciclismo", 51.5f, 240, false, "2024-02-01", "2024-02-28");
+			 
+			stravaService.crearReto(maraton);
+			stravaService.crearReto(triatlon);
+			logger.info("Retos registrados!");
+	 
+			// Entrenamientos de muestra
+			Entrenamiento carreraMañana = new Entrenamiento("Carrera Matutina", "Correr", 5.0f, 30, "2024-01-02", "08:00");
+			Entrenamiento ciclismoRuta = new Entrenamiento("Ruta en Bicicleta", "Ciclismo", 20.0f, 60, "2024-01-03", "10:00");
+			 
+			stravaService.crearEntrenamiento(carreraMañana);
+			stravaService.crearEntrenamiento(ciclismoRuta);
+			logger.info("Entrenamientos registrados!");
+
 		};
 	};
 }
