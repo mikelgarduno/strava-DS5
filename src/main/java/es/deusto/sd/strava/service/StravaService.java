@@ -19,6 +19,7 @@ public class StravaService {
     private List<Usuario> usuarios = new ArrayList<>();
     private List<Entrenamiento> entrenamientos = new ArrayList<>();
     private List<Reto> retos = new ArrayList<>();
+    
 
     public boolean registrarUsuario(Usuario u) {
         Usuario usuario = new Usuario();
