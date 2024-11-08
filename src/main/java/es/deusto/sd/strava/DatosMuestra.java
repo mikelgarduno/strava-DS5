@@ -22,31 +22,20 @@ public class DatosMuestra {
     @Bean
     CommandLineRunner initData(StravaService stravaService) {
 		return args -> {			
-			// Create some users
-			User batman = new User("BruceWayne", "batman@dc.com", "Batm@n123!");
-			User spiderman = new User("PeterParker", "spiderman@marvel.com", "Sp!derM4n2023");
-			User superman = new User("ClarkKent", "superman@dc.com", "Sup3rm@n456!");
-			User wonderWoman = new User("DianaPrince", "wonderwoman@dc.com", "Wond3rW0m@n!789");
-			User captainMarvel = new User("CarolDanvers", "captainmarvel@marvel.com", "C@ptMarv3l#987");
-			User blackWidow = new User("NatashaRomanoff", "blackwidow@marvel.com", "Bl@ckWid0w2023");
+			Usuario usainBolt = new Usuario("UsainBolt", "usain.bolt@athletics.com", "12-13-1978");
+			Usuario michaelPhelps = new Usuario("MichaelPhelps", "michael.phelps@swimming.com", "06-30-1985");
+			Usuario serenaWilliams = new Usuario("SerenaWilliams", "serena.williams@tennis.com", "09-26-1981");
+			Usuario lionelMessi = new Usuario("LionelMessi", "lionel.messi@soccer.com", "06-24-1987");
+			Usuario lebronJames = new Usuario("LeBronJames", "lebron.james@basketball.com", "12-30-1984");
+			Usuario cristianoRonaldo = new Usuario("CristianoRonaldo", "cristiano.ronald@soccer.com", 80.0f, 1.87f, "02-05-1985", 220, 60);	
 
-			Usuario usainBolt = new Usuario("UsainBolt", "usain.bolt@athletics.com", "Us@inB0lt123");
-			
-
-			authService.addUser(usainBolt);
-			authService.addUser(michaelPhelps);
-			authService.addUser(serenaWilliams);
-			authService.addUser(lionelMessi);
-			authService.addUser(lebronJames);
-
-			authService.addUser(batman);
-			authService.addUser(spiderman);
-			authService.addUser(superman);
-			authService.addUser(wonderWoman);
-			authService.addUser(captainMarvel);
-			authService.addUser(blackWidow);			
-			
-			logger.info("Users saved!");
+			stravaService.registrarUsuario(usainBolt);
+			stravaService.registrarUsuario(michaelPhelps);
+			stravaService.registrarUsuario(serenaWilliams);
+			stravaService.registrarUsuario(lionelMessi);
+			stravaService.registrarUsuario(lebronJames);
+			stravaService.registrarUsuario(cristianoRonaldo);
+			logger.info("Usuarios registrados!");
 			
 			// Create some categories
 			Category electronics = new Category("Electronics");
