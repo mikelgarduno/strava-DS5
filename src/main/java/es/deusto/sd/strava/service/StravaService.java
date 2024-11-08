@@ -32,6 +32,10 @@ public class StravaService {
         return true;
     }
 
+    public List<Usuario> consultarUsuarios() {
+        return usuarios;
+    }
+
     // Simulating entrenamiento and reto repositories
 	private static Map<Long, Entrenamiento> entrenamientoRepository = new HashMap<>();
     private static Map<Long, Reto> retoRepository = new HashMap();
@@ -46,7 +50,7 @@ public class StravaService {
         return retoRepository.values().stream().toList();
     }
 
-    // Create a new entrenamiento
+    /* Create a new entrenamiento
     public String crearEntrenamiento(EntrenamientoDTO entrenamientoDTO) {
         Entrenamiento entrenamiento = new Entrenamiento();
         entrenamiento.setDistancia(entrenamientoDTO.getDistancia());
@@ -60,5 +64,5 @@ public class StravaService {
     public String crearReto(Reto reto) {
         retos.add(reto);
         return "Reto creado exitosamente";
-    }
+    }*/
 }
