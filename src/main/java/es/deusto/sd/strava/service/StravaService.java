@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import es.deusto.sd.strava.dto.EntrenamientoDTO;
 import es.deusto.sd.strava.entity.Entrenamiento;
 import es.deusto.sd.strava.entity.Reto;
 import es.deusto.sd.strava.entity.Usuario;
@@ -16,9 +17,15 @@ public class StravaService {
     private List<Entrenamiento> entrenamientos = new ArrayList<>();
     private List<Reto> retos = new ArrayList<>();
 
-    public String registrarUsuario(Usuario usuario) {
+    public boolean registrarUsuario(Usuario u) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(usuario.getNombre());
+        usuario.setEmail(usuario.getEmail());
+        usuario.setFechaNacimiento(usuario.getFechaNacimiento());
+        usuario.setPeso(usuario.getPeso());
+        usuario.setAltura(usuario.getAltura());
         usuarios.add(usuario);
-        return "Usuario registrado exitosamente";
+        return true;
     }
 
     public List<Usuario> consultarUsuarios() {
@@ -26,6 +33,10 @@ public class StravaService {
     }
 
     public List<Entrenamiento> consultarEntrenamientos() {
+        List<Entrenamiento> entrenamientos = new ArrayList<>();
+        for (Entrenamiento e : entrenamientos) {
+            entrenamientos.add(new Entrenamiento(e.getTitulo(), e.getDeporte(), e.getDistancia(), e.getDuracion(), e.getFechaInicio(), e.getHoraInicio()));
+        }
         return entrenamientos;
     }
 
