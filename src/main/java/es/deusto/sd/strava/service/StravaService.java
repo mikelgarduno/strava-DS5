@@ -1,7 +1,10 @@
 package es.deusto.sd.strava.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale.Category;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -28,24 +31,28 @@ public class StravaService {
         return true;
     }
 
-    public List<Usuario> consultarUsuarios() {
-        return usuarios;
-    }
+    // Simulating entrenamiento and reto repositories
+	private static Map<Long, Entrenamiento> entrenamientoRepository = new HashMap<>();
+    private static Map<Long, Reto> retoRepository = new HashMap();
 
+    // Get all entrenamientos
     public List<Entrenamiento> consultarEntrenamientos() {
-        List<Entrenamiento> entrenamientos = new ArrayList<>();
-        for (Entrenamiento e : entrenamientos) {
-            entrenamientos.add(new Entrenamiento(e.getTitulo(), e.getDeporte(), e.getDistancia(), e.getDuracion(), e.getFechaInicio(), e.getHoraInicio()));
-        }
-        return entrenamientos;
+        return entrenamientoRepository.values().stream().toList();
     }
 
+    // Get all retos
     public List<Reto> consultarRetos() {
-        return retos;
+        return retoRepository.values().stream().toList();
     }
 
-    public String crearEntrenamiento(Entrenamiento entrenamiento) {
-        entrenamientos.add(entrenamiento);
+    // Create a new entrenamiento
+    public String crearEntrenamiento(EntrenamientoDTO entrenamientoDTO) {
+        Entrenamiento entrenamiento = new Entrenamiento();
+        entrenamiento.setDistancia(entrenamientoDTO.getDistancia());
+        entrenamiento.setDuracion(entrenamientoDTO.getDuracion());
+        entrenamiento.setFecha(entrenamientoDTO.getFecha());
+        entrenamiento.setUsuario(entrenamientoDTO.getUsuario());
+        entrenamientoRepository.put(entrenamiento.getId(), entrenamiento);
         return "Entrenamiento creado exitosamente";
     }
 
