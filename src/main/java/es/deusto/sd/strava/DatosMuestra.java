@@ -33,6 +33,9 @@ public class DatosMuestra {
 			stravaService.registrarUsuario(lebronJames);
 			stravaService.registrarUsuario(cristianoRonaldo);
 			logger.info("Usuarios registrados!");
+
+			
+			stravaService.consultarUsuarios().forEach(usuario -> logger.info(usuario.getNombre()));
 		};
 	};
 }
