@@ -37,7 +37,7 @@ public class StravaController {
         })
         
     @PostMapping("/usuarios")
-    public String registrarUsuario(@RequestBody Usuario usuario) {
+    public boolean registrarUsuario(@RequestBody Usuario usuario) {
         return stravaService.registrarUsuario(usuario);
     }
 
