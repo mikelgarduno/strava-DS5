@@ -19,13 +19,7 @@ public class StravaService {
     
 
     public boolean registrarUsuario(Usuario u) {
-        Usuario usuario = new Usuario();
-        usuario.setNombre(usuario.getNombre());
-        usuario.setEmail(usuario.getEmail());
-        usuario.setFechaNacimiento(usuario.getFechaNacimiento());
-        usuario.setPeso(usuario.getPeso());
-        usuario.setAltura(usuario.getAltura());
-        usuarios.add(usuario);
+        usuarios.add(u);
         return true;
     }
 

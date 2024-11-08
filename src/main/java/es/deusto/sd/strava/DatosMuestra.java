@@ -34,7 +34,6 @@ public class DatosMuestra {
 			stravaService.registrarUsuario(cristianoRonaldo);
 			logger.info("Usuarios registrados!");
 
-
 		};
 	};
 }
