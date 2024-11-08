@@ -2,7 +2,7 @@ package es.deusto.sd.strava.entity;
 
 import java.util.Objects;
 
-public class UsuarioS {
+public class Usuario {
     private String nombre;
     private String email;
     private float peso;
@@ -11,10 +11,10 @@ public class UsuarioS {
     private int frecuenciaCardiacaMax;
     private int frecuenciaCardiacaReposo;
 
-    public UsuarioS() {
+    public Usuario() {
     }
 
-    public UsuarioS(String nombre, String email, float peso, float altura, String fechaNacimiento,
+    public Usuario(String nombre, String email, float peso, float altura, String fechaNacimiento,
             int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo) {
         this.nombre = nombre;
         this.email = email;
@@ -25,7 +25,7 @@ public class UsuarioS {
         this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
     }
 
-    public UsuarioS(String nombre, String email, String fechaNacimiento) {
+    public Usuario(String nombre, String email, String fechaNacimiento) {
         this.nombre = nombre;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
@@ -93,7 +93,7 @@ public class UsuarioS {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        UsuarioS usuario = (UsuarioS) o;
+        Usuario usuario = (Usuario) o;
         return Float.compare(usuario.peso, peso) == 0 &&
                 Float.compare(usuario.altura, altura) == 0 &&
                 nombre.equals(usuario.nombre) &&

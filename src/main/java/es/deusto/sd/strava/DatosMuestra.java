@@ -1,8 +1,3 @@
-/**
- * This code is based on solutions provided by ChatGPT 4o and 
- * adapted using GitHub Copilot. It has been thoroughly reviewed 
- * and validated to ensure correctness and that it is free of errors.
-
 package es.deusto.sd.strava;
 
 import java.util.Calendar;
@@ -14,19 +9,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import es.deusto.sd.strava.entity.Article;
-import es.deusto.sd.strava.entity.Category;
-import es.deusto.sd.strava.entity.User;
-import es.deusto.sd.strava.service.AuctionsService;
-import es.deusto.sd.strava.service.AuthService;
+import es.deusto.sd.strava.entity.Entrenamiento;
+import es.deusto.sd.strava.entity.Reto;
+import es.deusto.sd.strava.entity.Usuario;
+import es.deusto.sd.strava.service.StravaService;
 
 @Configuration
-public class DataInitializer {
+public class DatosMuestra {
 
-	private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
+	private static final Logger logger = LoggerFactory.getLogger(DatosMuestra.class);
 	
     @Bean
-    CommandLineRunner initData(AuctionsService auctionsService, AuthService authService) {
+    CommandLineRunner initData(StravaService stravaService) {
 		return args -> {			
 			// Create some users
 			User batman = new User("BruceWayne", "batman@dc.com", "Batm@n123!");
@@ -35,6 +29,15 @@ public class DataInitializer {
 			User wonderWoman = new User("DianaPrince", "wonderwoman@dc.com", "Wond3rW0m@n!789");
 			User captainMarvel = new User("CarolDanvers", "captainmarvel@marvel.com", "C@ptMarv3l#987");
 			User blackWidow = new User("NatashaRomanoff", "blackwidow@marvel.com", "Bl@ckWid0w2023");
+
+			Usuario usainBolt = new Usuario("UsainBolt", "usain.bolt@athletics.com", "Us@inB0lt123");
+			
+
+			authService.addUser(usainBolt);
+			authService.addUser(michaelPhelps);
+			authService.addUser(serenaWilliams);
+			authService.addUser(lionelMessi);
+			authService.addUser(lebronJames);
 
 			authService.addUser(batman);
 			authService.addUser(spiderman);
