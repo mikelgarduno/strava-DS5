@@ -3,11 +3,15 @@ package es.deusto.sd.strava.facade;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.deusto.sd.strava.dto.RetoDTO;
+import es.deusto.sd.strava.dto.EntrenamientoDTO;
 import es.deusto.sd.strava.entity.Entrenamiento;
 import es.deusto.sd.strava.entity.Reto;
 import es.deusto.sd.strava.entity.Usuario;
@@ -41,12 +45,26 @@ public class StravaController {
         return stravaService.registrarUsuario(usuario);
     }
 
-    @Operation(summary = "Consultar todos los usuarios",
-               description = "Devuelve la lista completa de usuarios registrados")
-    @ApiResponse(responseCode = "200", description = "Lista de usuarios consultada exitosamente")
+    @Operation(
+        summary = "Consultar todos los usuarios",
+        description = "Devuelve la lista completa de usuarios registrados",
+        responses = {
+        @ApiResponse(responseCode = "200", description = "Lista de usuarios consultada exitosamente"),
+        @ApiResponse(responseCode = "204", description = "No hay usuarios registrados"),
+        @ApiResponse(responseCode = "500", description = "Error interno en el servidor")
+    })
+
     @GetMapping("/usuarios")
-    public List<Usuario> consultarUsuarios() {
-        return stravaService.consultarUsuarios();
+    public ResponseEntity<List<Usuario>> consultarUsuarios() {
+        try{
+            List<Usuario> usuarios = stravaService.consultarUsuarios();
+            if(usuarios.isEmpty()){
+                return ResponseEntity.noContent().build();
+            }
+            return new ResponseEntity<>(stravaService.consultarUsuarios(), HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @Operation(summary = "Consultar todos los entrenamientos",
@@ -83,5 +101,23 @@ public class StravaController {
         return stravaService.crearReto(reto);
     }
 
+    private RetoDTO retoaDTO(Reto reto) {
+        return new RetoDTO(reto.getNombre(),
+        reto.getDeporte(),
+        reto.getObjetivoDistancia(),
+        reto.getObjetivoTiempo(),
+        reto.isAceptado(),
+        reto.getFechaInicio(), 
+        reto.getFechaFin());
+    }
+
+    private EntrenamientoDTO entrenamientoaDTO(Entrenamiento entrenamiento) {
+        return new EntrenamientoDTO(entrenamiento.getTitulo(),
+        entrenamiento.getDeporte(),
+        entrenamiento.getDistancia(),
+        entrenamiento.getDuracion(),
+        entrenamiento.getFechaInicio(),
+        entrenamiento.getHoraInicio());
+    }
 
 }
