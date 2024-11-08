@@ -50,19 +50,20 @@ public class StravaService {
         return retoRepository.values().stream().toList();
     }
 
-    /* Create a new entrenamiento
-    public String crearEntrenamiento(EntrenamientoDTO entrenamientoDTO) {
+    //Create a new entrenamiento
+    public String crearEntrenamiento(Entrenamiento e) {
         Entrenamiento entrenamiento = new Entrenamiento();
-        entrenamiento.setDistancia(entrenamientoDTO.getDistancia());
-        entrenamiento.setDuracion(entrenamientoDTO.getDuracion());
-        entrenamiento.setFecha(entrenamientoDTO.getFecha());
-        entrenamiento.setUsuario(entrenamientoDTO.getUsuario());
-        entrenamientoRepository.put(entrenamiento.getId(), entrenamiento);
+        entrenamiento.setDistancia(e.getDistancia());
+        entrenamiento.setDuracion(e.getDuracion());
+        entrenamiento.setFechaInicio(e.getFechaInicio());
+        entrenamiento.setHoraInicio(e.getHoraInicio());
+        entrenamiento.setDeporte(e.getDeporte());
+        entrenamiento.setTitulo(e.getTitulo());
         return "Entrenamiento creado exitosamente";
     }
 
     public String crearReto(Reto reto) {
         retos.add(reto);
         return "Reto creado exitosamente";
-    }*/
+    }
 }
