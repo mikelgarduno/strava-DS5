@@ -3,7 +3,6 @@ package es.deusto.sd.strava.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale.Category;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -14,29 +13,22 @@ import es.deusto.sd.strava.entity.Usuario;
 
 @Service
 public class StravaService {
-
-    private List<Usuario> usuarios = new ArrayList<>();
     private List<Reto> retos = new ArrayList<>();
-    private List<Entrenamiento> entrenamientos = new ArrayList<>();
     
-
-    public boolean registrarUsuario(Usuario u) {
-        usuarios.add(u);
-        return true;
+    //FUNCION PARA CREAR UNA SESIÓN DE ENTRENAMIENTO EN USUARIO
+    public String crearEntrenamiento(Entrenamiento entrenamiento, Usuario usuario) {
+        if(entrenamiento != null) {
+            usuario.getEntrenamientos().add(entrenamiento);
+            return "Entrenamiento creado exitosamente";
+        }
+        return "Entrenamiento no puede ser nulo";
     }
-
-    public List<Usuario> consultarUsuarios() {
-        return usuarios;
-    }
-
-    // Simulating entrenamiento and reto repositories
-	private static Map<String, Entrenamiento> entrenamientoRepository = new HashMap<>();
-    private static Map<String, Reto> retoRepository = new HashMap();
+    
 
     // Get all entrenamientos
     public List<Entrenamiento> consultarEntrenamientos() {
         //return entrenamientoRepository.values().stream().toList();
-        return entrenamientos;
+        return null;
     }
 
     // Get all retos
@@ -45,26 +37,7 @@ public class StravaService {
         return retos;
     }
 
-    //Create a new entrenamiento
-    /* public String crearEntrenamiento(Entrenamiento e) {
-        Entrenamiento entrenamiento = new Entrenamiento();
-        entrenamiento.setDistancia(e.getDistancia());
-        entrenamiento.setDuracion(e.getDuracion());
-        entrenamiento.setFechaInicio(e.getFechaInicio());
-        entrenamiento.setHoraInicio(e.getHoraInicio());
-        entrenamiento.setDeporte(e.getDeporte());
-        entrenamiento.setTitulo(e.getTitulo());
-        return "Entrenamiento creado exitosamente";
-    }*/
 
-    public String crearEntrenamiento(Entrenamiento entrenamiento) {
-        if(entrenamiento != null) {
-            entrenamientoRepository.putIfAbsent(entrenamiento.getTitulo(), entrenamiento);
-            return "Entrenamiento registrado con éxito"; 
-        }
-        return "Entrenamiento no puede ser nulo";
-        
-    }
 
     /*public String crearReto(Reto r) {
         Reto reto = new Reto();
@@ -79,7 +52,6 @@ public class StravaService {
     }*/
     public String crearReto(Reto reto) {
         if(reto != null) {
-            retoRepository.putIfAbsent(reto.getNombre(), reto);
             return "Reto registrado con éxito"; 
         }
         return "Reto no puede ser nulo";

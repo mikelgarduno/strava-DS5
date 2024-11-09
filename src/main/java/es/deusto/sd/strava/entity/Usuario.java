@@ -1,6 +1,10 @@
 package es.deusto.sd.strava.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import es.deusto.sd.strava.entity.Entrenamiento;
+import es.deusto.sd.strava.entity.Reto;
 
 public class Usuario {
     private String nombre;
@@ -10,12 +14,15 @@ public class Usuario {
     private String fechaNacimiento;
     private int frecuenciaCardiacaMax;
     private int frecuenciaCardiacaReposo;
+    private List<Entrenamiento> entrenamientos;
+    private List<Reto> retosAceptados;
 
     public Usuario() {
     }
 
     public Usuario(String nombre, String email, float peso, float altura, String fechaNacimiento,
-            int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo) {
+            int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo, List<Entrenamiento> entrenamientos,
+            List<Reto> retosAceptados) {
         this.nombre = nombre;
         this.email = email;
         this.peso = peso;
@@ -23,6 +30,8 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.frecuenciaCardiacaMax = frecuenciaCardiacaMax;
         this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
+        this.entrenamientos = entrenamientos;
+        this.retosAceptados = retosAceptados;
     }
 
     public Usuario(String nombre, String email, String fechaNacimiento) {
@@ -87,6 +96,22 @@ public class Usuario {
         this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
     }
 
+    public List<Entrenamiento> getEntrenamientos() {
+        return entrenamientos;
+    }
+
+    public void setEntrenamientos(List<Entrenamiento> entrenamientos) {
+        this.entrenamientos = entrenamientos;
+    }
+
+    public List<Reto> getRetosAceptados() {
+        return retosAceptados;
+    }
+
+    public void setRetosAceptados(List<Reto> retosAceptados) {
+        this.retosAceptados = retosAceptados;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o)

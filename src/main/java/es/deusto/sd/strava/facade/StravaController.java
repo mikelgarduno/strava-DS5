@@ -31,42 +31,24 @@ public class StravaController {
     @Autowired
     private StravaService stravaService;
 
-    @Operation(
-        summary = "Registrar un nuevo usuario",
-        description = "Permite registrar un nuevo usuario en la aplicación",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente"),
-            @ApiResponse(responseCode = "409", description = "El usuario ya existe"),
-            @ApiResponse(responseCode = "500", description = "Error interno en el servidor")
-        })
-        
-    @PostMapping("/usuarios")
-    public boolean registrarUsuario(@RequestBody Usuario usuario) {
-        return stravaService.registrarUsuario(usuario);
-    }
-
-    @Operation(
-        summary = "Consultar todos los usuarios",
-        description = "Devuelve la lista completa de usuarios registrados",
-        responses = {
-        @ApiResponse(responseCode = "200", description = "Lista de usuarios consultada exitosamente"),
-        @ApiResponse(responseCode = "204", description = "No hay usuarios registrados"),
-        @ApiResponse(responseCode = "500", description = "Error interno en el servidor")
+    //FUNCION PARA CREAR UNA SESION DE ENTRENAMIENTO EN USUARIO
+    @Operation(summary = "Crear un nuevo entrenamiento",
+    description = "Permite crear una nueva sesión de entrenamiento de un usuario",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "Entrenamiento creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Entrenamiento no puede ser nulo"),
+        @ApiResponse(responseCode = "500", description = "Error interno en el servidor"),
+        @ApiResponse(responseCode = "409", description = "Entrenamiento ya existe")
     })
 
-    @GetMapping("/usuarios")
-    public ResponseEntity<List<Usuario>> consultarUsuarios() {
-        try{
-            List<Usuario> usuarios = stravaService.consultarUsuarios();
-            if(usuarios.isEmpty()){
-                return ResponseEntity.noContent().build();
-            }
-            return new ResponseEntity<>(stravaService.consultarUsuarios(), HttpStatus.OK);
-        } catch (Exception e){
-            return ResponseEntity.status(500).build();
-        }
+    @PostMapping("/entrenamientos")
+    public String crearEntrenamiento(
+     @Parameter(description = "Datos del entrenamiento a crear") @RequestBody Entrenamiento entrenamiento) {
+    return stravaService.crearEntrenamiento(entrenamiento, null);
     }
+    
 
+    //DEVUELVE LISTA DE SESIONES DE ENTRENAMIENTOS DE USUARIO
     @Operation(summary = "Consultar todos los entrenamientos",
                description = "Devuelve la lista completa de entrenamientos realizados")
     @ApiResponse(responseCode = "200", description = "Lista de entrenamientos consultada exitosamente")
@@ -75,6 +57,17 @@ public class StravaController {
         return stravaService.consultarEntrenamientos();
     }
 
+    //FUNCION PARA CREAR UN RETO
+    @Operation(summary = "Crear un nuevo reto",
+      description = "Permite crear un nuevo reto")
+        @ApiResponse(responseCode = "200", description = "Reto creado exitosamente")
+        @PostMapping("/retos")
+        public String crearReto(
+           @Parameter(description = "Datos del reto a crear") @RequestBody Reto reto) {
+        return stravaService.crearReto(reto);
+        }
+
+    //DEVUELVE LISTA DE RETOS ACTIVOS CREADOS POR LA COMUNIDAD (5 AL INICIO)
     @Operation(summary = "Consultar todos los retos",
                description = "Devuelve la lista completa de retos creados")
     @ApiResponse(responseCode = "200", description = "Lista de retos consultada exitosamente")
@@ -83,24 +76,16 @@ public class StravaController {
         return stravaService.consultarRetos();
     }
 
-    @Operation(summary = "Crear un nuevo entrenamiento",
-               description = "Permite crear un nuevo entrenamiento")
-    @ApiResponse(responseCode = "200", description = "Entrenamiento creado exitosamente")
-    @PostMapping("/entrenamientos")
-    public String crearEntrenamiento(
-            @Parameter(description = "Datos del entrenamiento a crear") @RequestBody Entrenamiento entrenamiento) {
-        return stravaService.crearEntrenamiento(entrenamiento);
-    }
+    
+    //FUNCION PARA ACEPTAR UN RETO
 
-    @Operation(summary = "Crear un nuevo reto",
-               description = "Permite crear un nuevo reto")
-    @ApiResponse(responseCode = "200", description = "Reto creado exitosamente")
-    @PostMapping("/retos")
-    public String crearReto(
-            @Parameter(description = "Datos del reto a crear") @RequestBody Reto reto) {
-        return stravaService.crearReto(reto);
-    }
 
+
+    //FUNCION PARA OBTENER LOS RETOS ACEPTADOS POR EL USUARIO Y SU PROGRESO
+
+
+
+    //FUNCION PARA PASAR DE RETO A RETO DTO
     private RetoDTO retoaDTO(Reto reto) {
         return new RetoDTO(reto.getNombre(),
         reto.getDeporte(),
@@ -111,6 +96,7 @@ public class StravaController {
         reto.getFechaFin());
     }
 
+    //FUNCION PARA PASAR DE ENTRENAMIENTO A ENTRENAMIENTO DTO
     private EntrenamientoDTO entrenamientoaDTO(Entrenamiento entrenamiento) {
         return new EntrenamientoDTO(entrenamiento.getTitulo(),
         entrenamiento.getDeporte(),
