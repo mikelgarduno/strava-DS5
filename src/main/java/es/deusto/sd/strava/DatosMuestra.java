@@ -30,8 +30,8 @@ public class DatosMuestra {
 			List<Entrenamiento> entrenamientos = new ArrayList<Entrenamiento>();
 
 			// Retos de muestra
-			Reto maraton = new Reto("Maratón Ciudad", "Correr", 42.195f, 300, false, "2024-01-01", "2024-01-31");
-			Reto triatlon = new Reto("Triatlón Olímpico", "Nadar-Correr-Ciclismo", 51.5f, 240, false, "2024-02-01", "2024-02-28");
+			Reto maraton = new Reto("Maratón Ciudad", "Correr", 42.195f, 300, "2024-01-01", "2024-01-31");
+			Reto triatlon = new Reto("Triatlón Olímpico", "Nadar-Correr-Ciclismo", 51.5f, 240, "2024-02-01", "2024-02-28");
 			List<Reto> retos = new ArrayList<Reto>();
 			retos.add(maraton);
 			retos.add(triatlon);

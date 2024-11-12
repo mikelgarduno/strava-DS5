@@ -7,20 +7,18 @@ public class Reto {
     private String deporte;
     private float objetivoDistancia;
     private int objetivoTiempo;
-    private boolean aceptado;
     private String fechaInicio;
     private String fechaFin;
 
     public Reto() {
     }
 
-    public Reto(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo, boolean aceptado,
+    public Reto(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo,
             String fechaInicio, String fechaFin) {
         this.nombre = nombre;
         this.deporte = deporte;
         this.objetivoDistancia = objetivoDistancia;
         this.objetivoTiempo = objetivoTiempo;
-        this.aceptado = aceptado;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }
@@ -55,14 +53,6 @@ public class Reto {
 
     public void setObjetivoTiempo(int objetivoTiempo) {
         this.objetivoTiempo = objetivoTiempo;
-    }
-
-    public boolean isAceptado() {
-        return aceptado;
-    }
-
-    public void setAceptado(boolean aceptado) {
-        this.aceptado = aceptado;
     }
 
     public String getFechaInicio() {
@@ -105,7 +95,6 @@ public class Reto {
                 ", deporte='" + deporte + '\'' +
                 ", objetivoDistancia=" + objetivoDistancia +
                 ", objetivoTiempo=" + objetivoTiempo +
-                ", aceptado=" + aceptado +
                 '}';
     }
 }

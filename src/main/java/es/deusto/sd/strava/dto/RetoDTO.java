@@ -5,22 +5,22 @@ public class RetoDTO {
     private String deporte;
     private float objetivoDistancia;
     private int objetivoTiempo;
-    private boolean aceptado;
     private String fechaInicio;
     private String fechaFin;
+    private int Progreso;
 
     public RetoDTO() {
     }
 
-    public RetoDTO(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo, boolean aceptado,
-            String fechaInicio, String fechaFin) {
+    public RetoDTO(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo,
+            String fechaInicio, String fechaFin, int Progreso) {
         this.nombre = nombre;
         this.deporte = deporte;
         this.objetivoDistancia = objetivoDistancia;
         this.objetivoTiempo = objetivoTiempo;
-        this.aceptado = aceptado;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.Progreso = Progreso;
     }
 
     public String getNombre() {
@@ -55,14 +55,6 @@ public class RetoDTO {
         this.objetivoTiempo = objetivoTiempo;
     }
 
-    public boolean isAceptado() {
-        return aceptado;
-    }
-
-    public void setAceptado(boolean aceptado) {
-        this.aceptado = aceptado;
-    }
-
     public String getFechaInicio() {
         return fechaInicio;
     }
@@ -77,5 +69,13 @@ public class RetoDTO {
 
     public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public int getProgreso() {
+        return Progreso;
+    }
+
+    public void setProgreso(int Progreso) {
+        this.Progreso = Progreso;
     }
 }

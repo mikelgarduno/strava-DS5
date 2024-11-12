@@ -60,7 +60,7 @@ public class UsuarioService {
     }
     
     //OBETENER USUARIO POR TOKEN
-    public Usuario getUserByToken(String token) {
+    public Usuario usuarioPorToken(String token) {
         return tokenes.get(token); 
     }
 
@@ -68,4 +68,6 @@ public class UsuarioService {
     public List<Usuario> consultarUsuarios() {
         return usuarios.values().stream().toList();
     }
+    
+
 }

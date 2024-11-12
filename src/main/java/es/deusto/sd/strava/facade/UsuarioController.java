@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 import es.deusto.sd.strava.entity.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import es.deusto.sd.strava.service.StravaService;
 import es.deusto.sd.strava.service.UsuarioService;
+import es.deusto.sd.strava.dto.UsuarioDTO;
 
 @RestController
-@RequestMapping("/autorizacion")
+@RequestMapping("/auth")
 @Tag(name = "Control de los usuarios", description = "Funciones relacionadas con los usuarios: registro, login y logout")
 public class UsuarioController {
 
@@ -41,29 +44,28 @@ public class UsuarioController {
             @ApiResponse(responseCode = "500", description = "Error interno en el servidor"),
             @ApiResponse(responseCode = "401", description = "Las credenciales no son correctas")
         })
-    @PostMapping("/registroUsuario/{usuario}")
+    @PostMapping("/registroUsuario")
     public ResponseEntity<String> registrarUsuario(
-        @Parameter(name = "contrasenya", description = "Contrasenya del usuario a registrar", required = true, example = "@€¬dAUq*2sS")
-        @RequestParam("contrasenya") String contrasenya,
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Contraseña y email del usuario a registrarse", required = true)
+        @RequestBody UsuarioDTO credenciales,
         @Parameter(name = "nombre", description = "Nombre del usuario a registrar", required = true, example = "Juan12")
-        @RequestParam("nombre") String nombre,
-        @Parameter(name = "email", description = "Email del usuario a registrar", required = true, example = "Juan12@yahoo.com")
-        @RequestParam("email") String email,
-        @Parameter(name = "fechaNacimiento", description = "Fecha de nacimiento del usuario", required = true, example = "12/12/1990")
+        @RequestParam("nombre" ) String nombre,
+        @Parameter(name = "fechaNacimiento", description = "Fecha de nacimiento del usuario",required = false, example = "12/12/1990")
         @RequestParam("fechaNacimiento") String fechaNacimiento,
-        @Parameter(name = "peso", description = "Peso del usuario a registrar en kilogramos", required = false, example = "19")
+        @Parameter(name = "peso", description = "Peso del usuario a registrar en kilogramos",required = false, example = "19")
         @RequestParam("peso") float peso,
-        @Parameter(name = "altura", description = "Altura del usuario a registrar en centimetros", required = false, example = "190")
+        @Parameter(name = "altura", description = "Altura del usuario a registrar en centimetros",required = false, example = "190")
         @RequestParam("altura") float altura,
-        @Parameter(name = "frecuenciaCardiacaMax", description = "Frecuencia cardiaca maxima del usuario a registrar", required = false, example = "140")
+        @Parameter(name = "frecuenciaCardiacaMax", description = "Frecuencia cardiaca maxima del usuario a registrar",required = false, example = "140")
         @RequestParam("frecuenciaCardiacaMax") int frecuenciaCardiacaMax,
-        @Parameter(name = "frecuenciaCardiacaReposo", description = "Frecuencia cardiaca en reposo del usuario a registrar", required = false, example = "70")
+        @Parameter(name = "frecuenciaCardiacaReposo", description = "Frecuencia cardiaca en reposo del usuario a registrar",required = false, example = "70")
         @RequestParam("frecuenciaCardiacaReposo") int frecuenciaCardiacaReposo
         ) {
 
         //Usuario usuario = new Usuario(nombre, email, peso, altura, fechaNacimiento, frecuenciaCardiacaMax, frecuenciaCardiacaReposo);
+        //HACE FALTA QUE FUNCIONE
         try {
-            if (usuarioService.esRegistable(email, contrasenya)) {
+            if (usuarioService.esRegistable(credenciales.getEmail(), credenciales.getContrasenya())) {
                 return new ResponseEntity<>("Usuario registrado exitosamente",HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("La contrasenya o el email no son correctos", HttpStatus.UNAUTHORIZED);
@@ -76,19 +78,20 @@ public class UsuarioController {
     
     //FUNCION PARA HACER LOGIN
     @Operation(
-        summary = "Login to the system",
-        description = "Allows a user to login by providing email and password. Returns a token if successful.",
+        summary = "Logearse en el sistema",
+        description = "Permite a un usuario iniciar sesión proporcionando correo electrónico y contraseña. Devuelve un token si es exitoso.",
         responses = {
-            @ApiResponse(responseCode = "200", description = "OK: Login successful, returns a token"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized: Invalid credentials, login failed"),
+            @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, devuelve un token"),
+            @ApiResponse(responseCode = "401", description = "No autorizado: Credenciales inválidas, inicio de sesión fallido"),
         }
     )
+
     @PostMapping("/login")
     public ResponseEntity<String> login(
-    		@Parameter(name = "credentials", description = "User's credentials", required = true)    	
-    		@RequestBody  String email, String contraseña ) {    	
-        Optional<String> token = usuarioService.login(email, contraseña);
-        
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Contraseña e email del usuario", required = true)
+        @RequestBody UsuarioDTO credenciales) 
+        {    
+        Optional<String> token = usuarioService.login(credenciales.getEmail(), credenciales.getContrasenya());
     	if (token.isPresent()) {
     		return new ResponseEntity<>(token.get(), HttpStatus.OK);
     	} else {
@@ -98,17 +101,17 @@ public class UsuarioController {
 
     // FUNCION PARA HACER LOGOUT
     @Operation(
-        summary = "Logout from the system",
-        description = "Allows a user to logout by providing the authorization token.",
+        summary = "Cerrar sesión del sistema",
+        description = "Permite a un usuario cerrar sesión proporcionando el token de autorización.",
         responses = {
-            @ApiResponse(responseCode = "204", description = "No Content: Logout successful"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized: Invalid token, logout failed"),
+            @ApiResponse(responseCode = "204", description = "Sin contenido: Cierre de sesión exitoso"),
+            @ApiResponse(responseCode = "401", description = "No autorizado: Token inválido, cierre de sesión fallido"),
         }
     )    
     @PostMapping("/logout")    
     public ResponseEntity<Void> logout(
-    		@Parameter(name = "token", description = "Authorization token", required = true, example = "Bearer 1924888a05c")
-    		@RequestBody String token) {    	
+            @Parameter(name = "token", description = "Token de autorización", required = true, example = "24.433.553.55533.3")
+            @RequestBody String token) {
         Optional<Boolean> result = usuarioService.logout(token);
     	
         if (result.isPresent() && result.get()) {

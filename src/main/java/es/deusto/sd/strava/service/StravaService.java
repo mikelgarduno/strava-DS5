@@ -20,18 +20,18 @@ public class StravaService {
         if(entrenamiento != null) {
             usuario.getEntrenamientos().add(entrenamiento);
             return "Entrenamiento creado exitosamente";
+        } else{
+            return "Entrenamiento no puede ser nulo";
         }
-        return "Entrenamiento no puede ser nulo";
     }
     
 
-    // Get all entrenamientos
-    public List<Entrenamiento> consultarEntrenamientos() {
-        //return entrenamientoRepository.values().stream().toList();
-        return null;
+    // OBTENER TODOS LOS ENTRENAMIENTOS DE UN USUARIO
+    public List<Entrenamiento> consultarEntrenamientos(Usuario usuario) {
+        return usuario.getEntrenamientos();
     }
 
-    // Get all retos
+    // OBTENER TODOS LOS RETOS ACEPTADOS DE UN USUARIO
     public List<Reto> consultarRetos() {
         //return retoRepository.values().stream().toList();
         return retos;
@@ -58,7 +58,7 @@ public class StravaService {
     }
 
 
-    public String aceptarReto(String nombreReto) {
+    public String aceptarReto(String nombreReto, String token) {
         return "retoAceptado";
     }
 
