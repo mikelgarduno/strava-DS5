@@ -46,7 +46,9 @@ public class DatosMuestra {
 			Usuario serenaWilliams = new Usuario("SerenaWilliams", "serena.williams@tennis.com", "09-26-1981");
 			Usuario lionelMessi = new Usuario("LionelMessi", "lionel.messi@soccer.com", "06-24-1987");
 			Usuario lebronJames = new Usuario("LeBronJames", "lebron.james@basketball.com", "12-30-1984");
-			Usuario cristianoRonaldo = new Usuario("CristianoRonaldo", "cristiano.ronald@soccer.com", 80.0f, 1.87f, "02-05-1985", 220, 60, entrenamientos,retos);	
+			Usuario cristianoRonaldo = new Usuario("CristianoRonaldo", "cristiano.ronald@soccer.com", 80.0f, 1.87f, "02-05-1985", 220, 60);	
+			cristianoRonaldo.setEntrenamientos(entrenamientos);
+			cristianoRonaldo.setRetosAceptados(retos);
 
 			UsuarioService.addUser(usainBolt);
 			UsuarioService.addUser(michaelPhelps);

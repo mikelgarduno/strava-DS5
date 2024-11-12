@@ -16,32 +16,42 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService {
+    // REPOSITORIO DE USUARIOS Y TOKENS
+    private static Map<String, Usuario> usuarios = new HashMap<>();
+    private static Map<String, Usuario> tokenes = new HashMap<>(); 
 
-    // Simulating a user repository
-    private static Map<String, Usuario> userRepository = new HashMap<>();
-    
-    // Storage to keep the session of the users that are logged in
-    private static Map<String, Usuario> tokenStore = new HashMap<>(); 
+    //REGISTRAR USUARIO
+    public Boolean esRegistable(String email, String contraseña) {
+        return GoogleMetaService.comprobarEmailContrasena(email, contraseña);
+    }
+
+    //AÑADIR USUARIO
+      public void addUser(Usuario user) {
+    	if (user != null) {
+    		usuarios.putIfAbsent(user.getEmail(), user);
+    	}
+    }
 
 
-    // Login method that checks if the user exists in the database and validates the password
+    // LOGIN Y GENERAR TOKEN
     public Optional<String> login(String email, String password) {
-        Usuario user = userRepository.get(email);
+        Usuario user = usuarios.get(email);
         
-        if (user != null && GoogleMetaService.checkPassword(email, password)) {
-            String token = GoogleMetaService.login(email, password);  // Generate a random token for the session
-            tokenStore.put(token, user);     // Store the token and associate it with the user
+        if (user != null && GoogleMetaService.comprobarEmailContrasena(email, password)) {
+            String token = GoogleMetaService.loginToken(email, password);  // Generate a random token for the session
+            tokenes.put(token, user);     // Store the token and associate it with the user
 
             return Optional.of(token);
         } else {
         	return Optional.empty();
         }
     }
+
     
-    // Logout method to remove the token from the session store
+    // LOGOUT Y BORRAR TOKEN
     public Optional<Boolean> logout(String token) {
-        if (tokenStore.containsKey(token)) {
-            tokenStore.remove(token);
+        if (tokenes.containsKey(token)) {
+            tokenes.remove(token);
 
             return Optional.of(true);
         } else {
@@ -49,30 +59,13 @@ public class UsuarioService {
         }
     }
     
-    // Method to add a new user to the repository
-    public void addUser(Usuario user) {
-    	if (user != null) {
-    		userRepository.putIfAbsent(user.getEmail(), user);
-    	}
-    }
-    
-    // Method to get the user based on the token
+    //OBETENER USUARIO POR TOKEN
     public Usuario getUserByToken(String token) {
-        return tokenStore.get(token); 
-    }
-    
-    // Method to get the user based on the email
-    public Usuario getUserByEmail(String email) {
-		return userRepository.get(email);
-	}
-
-    // Synchronized method to guarantee unique token generation
-    public String obtenerToken(String email, String password) {
-        return GoogleMetaService.login(email, password);
+        return tokenes.get(token); 
     }
 
-    // Get all users
+    // CONSEGUIR TODOS LOS USUARIOS ADMIN
     public List<Usuario> consultarUsuarios() {
-        return userRepository.values().stream().toList();
+        return usuarios.values().stream().toList();
     }
 }

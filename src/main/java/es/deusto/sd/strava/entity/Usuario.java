@@ -3,8 +3,6 @@ package es.deusto.sd.strava.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import es.deusto.sd.strava.entity.Entrenamiento;
-import es.deusto.sd.strava.entity.Reto;
 
 public class Usuario {
     private String nombre;
@@ -21,8 +19,7 @@ public class Usuario {
     }
 
     public Usuario(String nombre, String email, float peso, float altura, String fechaNacimiento,
-            int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo, List<Entrenamiento> entrenamientos,
-            List<Reto> retosAceptados) {
+            int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo) {
         this.nombre = nombre;
         this.email = email;
         this.peso = peso;
@@ -30,8 +27,8 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.frecuenciaCardiacaMax = frecuenciaCardiacaMax;
         this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
-        this.entrenamientos = entrenamientos;
-        this.retosAceptados = retosAceptados;
+        this.entrenamientos = new ArrayList<>();
+        this.retosAceptados = new ArrayList<>();
     }
 
     public Usuario(String nombre, String email, String fechaNacimiento) {

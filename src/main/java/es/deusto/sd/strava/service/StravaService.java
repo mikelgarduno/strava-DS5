@@ -58,14 +58,12 @@ public class StravaService {
     }
 
 
-
-    /* 
-    + 
-    + aceptarReto(): boolean
-    + consultarRetosAceptados(usuario_Id: String): List<RetoDTO>
-    + consultarProgresoReto(reto_Id: String, usuario_Id: String): float */
-
-    
+    public String aceptarReto(String nombreReto) {
+        return "retoAceptado";
+    }
 
 
+    public List<Reto> consultarRetosAceptados(Usuario usuario) {
+        return usuario.getRetosAceptados();
+    }
 }
