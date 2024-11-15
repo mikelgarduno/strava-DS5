@@ -147,7 +147,8 @@ public class StravaController {
             @PathVariable("nombreReto") String nombreReto,
             @Parameter( name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
             @RequestBody String token) {
-        return stravaService.aceptarReto(nombreReto, token);
+        Usuario usuario = usuarioService.usuarioPorToken(token);
+        return stravaService.aceptarReto(nombreReto, usuario);
     }
 
     // FUNCION PARA OBTENER LOS RETOS ACEPTADOS POR EL USUARIO Y SU PROGRESO
