@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
+
 public class Usuario {
     private String nombre;
     private String email;
@@ -14,12 +16,13 @@ public class Usuario {
     private int frecuenciaCardiacaReposo;
     private List<Entrenamiento> entrenamientos;
     private List<Reto> retosAceptados;
+    private TipoLogin tipoLogin;
 
     public Usuario() {
     }
 
     public Usuario(String nombre, String email, float peso, float altura, String fechaNacimiento,
-            int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo) {
+            int frecuenciaCardiacaMax, int frecuenciaCardiacaReposo, TipoLogin tipoLogin) {
         this.nombre = nombre;
         this.email = email;
         this.peso = peso;
@@ -29,12 +32,14 @@ public class Usuario {
         this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
         this.entrenamientos = new ArrayList<>();
         this.retosAceptados = new ArrayList<>();
+        this.tipoLogin = tipoLogin;
     }
 
-    public Usuario(String nombre, String email, String fechaNacimiento) {
+    public Usuario(String nombre, String email, String fechaNacimiento, TipoLogin tipoLogin) {
         this.nombre = nombre;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
+        this.tipoLogin = tipoLogin;
     }
 
     public String getNombre() {
@@ -108,21 +113,24 @@ public class Usuario {
     public void setRetosAceptados(List<Reto> retosAceptados) {
         this.retosAceptados = retosAceptados;
     }
+
+    public TipoLogin getTipoLogin() {
+        return tipoLogin;
+    }
+
+    public void setTipoLogin(TipoLogin tipoLogin) {
+        this.tipoLogin = tipoLogin;
+    }
     
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o){
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
         Usuario usuario = (Usuario) o;
-        return Float.compare(usuario.peso, peso) == 0 &&
-                Float.compare(usuario.altura, altura) == 0 &&
-                nombre.equals(usuario.nombre) &&
-                email.equals(usuario.email) &&
-                fechaNacimiento.equals(usuario.fechaNacimiento) &&
-                frecuenciaCardiacaMax == usuario.frecuenciaCardiacaMax &&
-                frecuenciaCardiacaReposo == usuario.frecuenciaCardiacaReposo;
+        return nombre.equals(usuario.nombre) &&
+        email.equals(usuario.email);
     }
 
     @Override
