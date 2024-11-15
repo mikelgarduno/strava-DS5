@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +26,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,10 +159,13 @@ public class StravaController {
             @ApiResponse(responseCode = "409", description = "Usuario no existe")
     })
     @GetMapping("/retosAceptados")
-    public List<RetoDTO> consultarRetosAceptados(
-            @Parameter(name = "token", description = "Token de autorizacion", required = true, example = "1234567890")
-            @RequestBody String token) {
+    public ResponseEntity<List<Reto>>  consultarRetosAceptados(
+        @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
+        @RequestParam("token") String token) {
         Usuario usuario = usuarioService.usuarioPorToken(token);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         List<Reto> retos = stravaService.consultarRetosAceptados(usuario);
         List<RetoDTO> retosDTO = new ArrayList<>();
         if (retos != null) {
@@ -170,9 +173,9 @@ public class StravaController {
                 retosDTO.add(retoaDTO(reto));
             }
         } else {
-            return null;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return retosDTO;
+        return ResponseEntity.ok(retos);
     }
 
     // FUNCION PARA PASAR DE RETO A RETO DTO
