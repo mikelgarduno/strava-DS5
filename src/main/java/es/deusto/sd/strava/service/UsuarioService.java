@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import es.deusto.sd.strava.entity.TipoLogin;
 import es.deusto.sd.strava.entity.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,11 +36,13 @@ public class UsuarioService {
 
     // LOGIN Y GENERAR TOKEN
     public Optional<String> login(String email, String password) {
-        Usuario user = usuarios.get(email);
+        Usuario prueba = new Usuario("mikel","mikel@w","10-1-2000",TipoLogin.GOOGLE);
+        usuarios.put(prueba.getEmail(), prueba);
+        //Usuario user = usuarios.get(email);
         
-        if (user != null && GoogleMetaService.comprobarEmailContrasena(email, password)) {
+        if (prueba != null && GoogleMetaService.comprobarEmailContrasena(email, password)) {
             String token = GoogleMetaService.loginToken(email, password);  // Generate a random token for the session
-            tokenes.put(token, user);     // Store the token and associate it with the user
+            tokenes.put(token, prueba);     // Store the token and associate it with the user
 
             return Optional.of(token);
         } else {

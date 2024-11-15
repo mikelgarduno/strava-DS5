@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import es.deusto.sd.strava.entity.Entrenamiento;
 import es.deusto.sd.strava.entity.Reto;
 import es.deusto.sd.strava.entity.Usuario;
+import es.deusto.sd.strava.entity.TipoLogin;
 import es.deusto.sd.strava.service.StravaService;
 import es.deusto.sd.strava.service.UsuarioService;
 
@@ -41,12 +42,12 @@ public class DatosMuestra {
 			logger.info("Retos registrados!");
 
 			// Usuarios de muestra
-			Usuario usainBolt = new Usuario("UsainBolt", "usain.bolt@athletics.com", "12-13-1978");
-			Usuario michaelPhelps = new Usuario("MichaelPhelps", "michael.phelps@swimming.com", "06-30-1985");
-			Usuario serenaWilliams = new Usuario("SerenaWilliams", "serena.williams@tennis.com", "09-26-1981");
-			Usuario lionelMessi = new Usuario("LionelMessi", "lionel.messi@soccer.com", "06-24-1987");
-			Usuario lebronJames = new Usuario("LeBronJames", "lebron.james@basketball.com", "12-30-1984");
-			Usuario cristianoRonaldo = new Usuario("CristianoRonaldo", "cristiano.ronald@soccer.com", 80.0f, 1.87f, "02-05-1985", 220, 60);	
+			Usuario usainBolt = new Usuario("UsainBolt", "usain.bolt@athletics.com", "12-13-1978", TipoLogin.GOOGLE);
+			Usuario michaelPhelps = new Usuario("MichaelPhelps", "michael.phelps@swimming.com", "06-30-1985", TipoLogin.META);
+			Usuario serenaWilliams = new Usuario("SerenaWilliams", "serena.williams@tennis.com", "09-26-1981", TipoLogin.GOOGLE);
+			Usuario lionelMessi = new Usuario("LionelMessi", "lionel.messi@soccer.com", "06-24-1987", TipoLogin.META);
+			Usuario lebronJames = new Usuario("LeBronJames", "lebron.james@basketball.com", "12-30-1984", TipoLogin.GOOGLE);
+			Usuario cristianoRonaldo = new Usuario("CristianoRonaldo", "cristiano.ronald@soccer.com", 80.0f, 1.87f, "02-05-1985", 220, 60, TipoLogin.META);	
 			cristianoRonaldo.setEntrenamientos(entrenamientos);
 			cristianoRonaldo.setRetosAceptados(retos);
 

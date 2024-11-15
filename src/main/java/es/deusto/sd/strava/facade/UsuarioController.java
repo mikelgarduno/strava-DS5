@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.deusto.sd.strava.entity.TipoLogin;
 import es.deusto.sd.strava.entity.Usuario;
+import es.deusto.sd.strava.entity.TipoLogin;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -61,7 +63,7 @@ public class UsuarioController {
         @Parameter(name = "frecuenciaCardiacaReposo", description = "Frecuencia cardiaca en reposo del usuario a registrar",required = false, example = "70")
         @RequestParam("frecuenciaCardiacaReposo") int frecuenciaCardiacaReposo,
         @Parameter(name = "Tipo de Registro", description = "Que servicio de registro va a usar el usuario",required = true, example = "META")
-        @RequestParam("Tipo de Registro") String tipoRegistro
+        @RequestParam("Tipo de Registro") TipoLogin tipoRegistro
         ) {
         try {
             if (usuarioService.esRegistable(credenciales.getEmail(), credenciales.getContrasenya())) {

@@ -64,9 +64,8 @@ public class StravaController {
             @Parameter( description = "Token de autorizacion", required = true, example = "1234567890")
     		@RequestBody String token) {
 
-        Entrenamiento entrenamientoX = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
-        Usuario usuario = usuarioService.usuarioPorToken(token);
-        return stravaService.crearEntrenamiento(entrenamientoX, usuario);
+        Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
+        return stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token));
     }
 
     // DEVUELVE LISTA DE SESIONES DE ENTRENAMIENTOS DE USUARIO
