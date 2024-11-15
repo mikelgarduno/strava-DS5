@@ -105,17 +105,17 @@ public class StravaController {
     @PostMapping("/reto")
     public String crearReto(
             @Parameter(name = "nombre", description = "Nombre del reto a crear", required = true, example = "Reto1")
-            @RequestParam String nombre,
+            @RequestParam("nombre") String nombre,
             @Parameter(name = "deporte", description = "Deporte del reto a crear", required = true, example = "Ciclismo")
-            @RequestParam String deporte,
+            @RequestParam("deporte") String deporte,
             @Parameter(name = "objetivoDistancia", description = "Distancia objetivo del reto a crear", required = true, example = "100")
-            @RequestParam float objetivoDistancia,
+            @RequestParam("objetivoDistancia") float objetivoDistancia,
             @Parameter(name = "objetivoTiempo", description = "Tiempo objetivo del reto a crear", required = true, example = "60")
-            @RequestParam int objetivoTiempo,
+            @RequestParam("objetivoTiempo") int objetivoTiempo,
             @Parameter(name = "fechaInicio", description = "Fecha de inicio del reto a crear", required = true, example = "12/12/2021")
-            @RequestParam String fechaInicio,
+            @RequestParam("fechaInicio") String fechaInicio,
             @Parameter(name = "fechaFin", description = "Fecha de fin del reto a crear", required = true, example = "12/12/2021")
-            @RequestParam String fechaFin
+            @RequestParam("fechaFin") String fechaFin
             ) {
         Reto reto = new Reto(nombre, deporte, objetivoDistancia, objetivoTiempo, fechaInicio, fechaFin);
         return stravaService.crearReto(reto);
