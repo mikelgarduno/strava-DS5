@@ -37,7 +37,7 @@ public class UsuarioController {
     //FUNCION PARA REGISTRAR UN USUARIO
     @Operation(
         summary = "Registrar un nuevo usuario",
-        description = "Permite registrar un nuevo usuario en la aplicación mediante los servicios de Google y Meta.",
+        description = "Permite registrar un nuevo usuario en la aplicación mediante los servicios de Google o Meta.",
         responses = {
             @ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente"),
             @ApiResponse(responseCode = "409", description = "El usuario ya existe"),
@@ -59,11 +59,10 @@ public class UsuarioController {
         @Parameter(name = "frecuenciaCardiacaMax", description = "Frecuencia cardiaca maxima del usuario a registrar",required = false, example = "140")
         @RequestParam("frecuenciaCardiacaMax") int frecuenciaCardiacaMax,
         @Parameter(name = "frecuenciaCardiacaReposo", description = "Frecuencia cardiaca en reposo del usuario a registrar",required = false, example = "70")
-        @RequestParam("frecuenciaCardiacaReposo") int frecuenciaCardiacaReposo
+        @RequestParam("frecuenciaCardiacaReposo") int frecuenciaCardiacaReposo,
+        @Parameter(name = "Tipo de Registro", description = "Que servicio de registro va a usar el usuario",required = true, example = "META")
+        @RequestParam("Tipo de Registro") String tipoRegistro
         ) {
-
-        //Usuario usuario = new Usuario(nombre, email, peso, altura, fechaNacimiento, frecuenciaCardiacaMax, frecuenciaCardiacaReposo);
-        //HACE FALTA QUE FUNCIONE
         try {
             if (usuarioService.esRegistable(credenciales.getEmail(), credenciales.getContrasenya())) {
                 return new ResponseEntity<>("Usuario registrado exitosamente",HttpStatus.OK);
