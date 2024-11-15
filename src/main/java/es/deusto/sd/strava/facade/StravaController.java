@@ -55,23 +55,23 @@ public class StravaController {
     @PostMapping("/entrenamiento")
     public String crearEntrenamiento(
             @Parameter(name = "titulo", description = "Nombre del entrenamiento a crear", required = true, example = "Entrenamiento1")
-            @RequestParam String titulo ,
+            @RequestParam("titulo") String titulo ,
             @Parameter(name = "deporte", description = "Deporte del entrenamiento a crear", required = true, example = "Ciclismo")
-            @RequestParam String deporte,
+            @RequestParam("deporte") String deporte,
             @Parameter(name = "distancia", description = "Distancia del entrenamiento a crear", required = true, example = "10.5")
-            @RequestParam float distancia,
+            @RequestParam("distancia") float distancia,
             @Parameter(name = "duracion", description = "Duración del entrenamiento a crear", required = true, example = "60")
-            @RequestParam int duracion,
+            @RequestParam("duracion") int duracion,
             @Parameter(name = "fechaInicio", description = "Fecha de inicio del entrenamiento a crear", required = true, example = "12/12/2021")
-            @RequestParam String fechaInicio,
+            @RequestParam("fechaInicio") String fechaInicio,
             @Parameter(name = "horaInicio", description = "Hora de inicio del entrenamiento a crear", required = true, example = "12:00")
-            @RequestParam String horaInicio,
+            @RequestParam("horaInicio") String horaInicio,
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
-    		@RequestParam String token) {
+    		@RequestParam("token") String token) {
 
         logger.info("Creando entrenamiento");
-        //Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
-        return "hola" ;//stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token));
+        Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
+        return stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token));
     }
 
     // DEVUELVE LISTA DE SESIONES DE ENTRENAMIENTOS DE USUARIO
