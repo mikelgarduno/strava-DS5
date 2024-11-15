@@ -28,10 +28,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api")
 @Tag(name = "API de Simulación de Strava", description = "Gestión de usuarios, entrenamientos y retos")
 public class StravaController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StravaController.class);
 
     @Autowired
     private StravaService stravaService;
@@ -61,11 +66,12 @@ public class StravaController {
             @RequestParam String fechaInicio,
             @Parameter(name = "horaInicio", description = "Hora de inicio del entrenamiento a crear", required = true, example = "12:00")
             @RequestParam String horaInicio,
-            @Parameter( description = "Token de autorizacion", required = true, example = "1234567890")
-    		@RequestBody String token) {
+            @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
+    		@RequestParam String token) {
 
-        Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
-        return stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token));
+        logger.info("Creando entrenamiento");
+        //Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
+        return "hola" ;//stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token));
     }
 
     // DEVUELVE LISTA DE SESIONES DE ENTRENAMIENTOS DE USUARIO
