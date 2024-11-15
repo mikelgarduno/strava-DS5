@@ -1,9 +1,7 @@
 package es.deusto.sd.strava.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -13,8 +11,8 @@ import es.deusto.sd.strava.entity.Usuario;
 
 @Service
 public class StravaService {
-    private List<Reto> retos = new ArrayList<>();
-    
+    List<Reto> listaRetos = new ArrayList<>();
+
     //FUNCION PARA CREAR UNA SESIÓN DE ENTRENAMIENTO EN USUARIO
     public String crearEntrenamiento(Entrenamiento entrenamiento, Usuario usuario) {
         if(entrenamiento != null) {
@@ -31,36 +29,30 @@ public class StravaService {
         return usuario.getEntrenamientos();
     }
 
-    // OBTENER TODOS LOS RETOS ACEPTADOS DE UN USUARIO
+    // OBTENER TODOS LOS RETOS 
     public List<Reto> consultarRetos() {
-        //return retoRepository.values().stream().toList();
-        return retos;
+        return listaRetos;
     }
 
-
-
-    /*public String crearReto(Reto r) {
-        Reto reto = new Reto();
-        reto.setObjetivoDistancia(r.getObjetivoDistancia());
-        reto.setObjetivoTiempo(r.getObjetivoTiempo());
-        reto.setFechaInicio(r.getFechaInicio());
-        reto.setFechaFin(r.getFechaFin());
-        reto.setDeporte(r.getDeporte());
-        reto.setNombre(r.getNombre());
-        retos.add(reto);
-        return "Reto creado exitosamente";
-    }*/
     public String crearReto(Reto reto) {
         if(reto != null) {
+            listaRetos.add(reto);
             return "Reto registrado con éxito"; 
         }
         return "Reto no puede ser nulo";
     }
 
 
-    public String aceptarReto(String nombreReto, String token) {
-        return "retoAceptado";
+    public String aceptarReto(String nombreReto, Usuario usuario) {
+        for (Reto reto : listaRetos) {
+            if (reto.getNombre().equals(nombreReto)) {
+                usuario.getRetosAceptados().add(reto);
+                return "Reto aceptado"; 
+            }
+        }
+        return "Reto no encontrado";
     }
+
 
 
     public List<Reto> consultarRetosAceptados(Usuario usuario) {
