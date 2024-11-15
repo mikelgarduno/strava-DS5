@@ -40,6 +40,8 @@ public class Usuario {
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
         this.tipoLogin = tipoLogin;
+        this.entrenamientos = new ArrayList<>();
+        this.retosAceptados = new ArrayList<>();
     }
 
     public String getNombre() {
