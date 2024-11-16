@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,7 +52,7 @@ public class StravaController {
     })
 
     @PostMapping("/entrenamiento")
-    public String crearEntrenamiento(
+    public ResponseEntity<String> crearEntrenamiento(
             @Parameter(name = "titulo", description = "Nombre del entrenamiento a crear", required = true, example = "Entrenamiento1")
             @RequestParam("titulo") String titulo ,
             @Parameter(name = "deporte", description = "Deporte del entrenamiento a crear", required = true, example = "Ciclismo")
@@ -71,7 +70,7 @@ public class StravaController {
 
         logger.info("Creando entrenamiento");
         Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
-        return stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token));
+        return ResponseEntity.ok(stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token)));
     }
 
     // DEVUELVE LISTA DE SESIONES DE ENTRENAMIENTOS DE USUARIO
@@ -86,9 +85,9 @@ public class StravaController {
     
     @GetMapping("/entrenamientos")
     public ResponseEntity<List<Entrenamiento>> consultarEntrenamientos(
-            @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890") 
-    		@RequestBody String token
-    ) {
+        @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
+        @RequestParam("token") String token) {
+
         Usuario usuario = usuarioService.usuarioPorToken(token);
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
