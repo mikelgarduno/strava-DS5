@@ -84,7 +84,7 @@ public class StravaController {
     })
     
     @GetMapping("/entrenamientos")
-    public ResponseEntity<List<Entrenamiento>> consultarEntrenamientos(
+    public ResponseEntity<List<EntrenamientoDTO>> consultarEntrenamientos(
         @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
         @RequestParam("token") String token) {
 
@@ -92,7 +92,16 @@ public class StravaController {
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(stravaService.consultarEntrenamientos(usuario));
+        List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario);
+        List<EntrenamientoDTO> entrenamientosDTO = new ArrayList<>();
+        if (entrenamientos != null) {
+            for (Entrenamiento entrenamiento : entrenamientos) {
+                entrenamientosDTO.add(entrenamientoaDTO(entrenamiento));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(entrenamientosDTO);
     }
 
     // FUNCION PARA CREAR UN RETO
@@ -131,8 +140,17 @@ public class StravaController {
         @ApiResponse(responseCode = "200", description = "Lista de retos consultada exitosamente")})
 
     @GetMapping("/retos")
-    public ResponseEntity<List<Reto>> consultarRetos() {
-        return ResponseEntity.ok(stravaService.consultarRetos());
+    public ResponseEntity<List<RetoDTO>> consultarRetos() {
+        List<Reto> retos = stravaService.consultarRetos();
+        List<RetoDTO> retosDTO = new ArrayList<>();
+        if (retos != null) {
+            for (Reto reto : retos) {
+                retosDTO.add(retoaDTO(reto));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(retosDTO);
     }
 
     // FUNCION PARA ACEPTAR UN RETO
@@ -164,7 +182,7 @@ public class StravaController {
             @ApiResponse(responseCode = "409", description = "Usuario no existe")
     })
     @GetMapping("/retosAceptados")
-    public ResponseEntity<List<Reto>>  consultarRetosAceptados(
+    public ResponseEntity<List<RetoDTO>>  consultarRetosAceptados(
         @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
         @RequestParam("token") String token) {
         Usuario usuario = usuarioService.usuarioPorToken(token);
@@ -180,7 +198,7 @@ public class StravaController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(retos);
+        return ResponseEntity.ok(retosDTO);
     }
 
     // FUNCION PARA PASAR DE RETO A RETO DTO
