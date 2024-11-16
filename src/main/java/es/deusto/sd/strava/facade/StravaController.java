@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,7 +53,7 @@ public class StravaController {
     })
 
     @PostMapping("/entrenamiento")
-    public String crearEntrenamiento(
+    public ResponseEntity<String> crearEntrenamiento(
             @Parameter(name = "titulo", description = "Nombre del entrenamiento a crear", required = true, example = "Entrenamiento1")
             @RequestParam("titulo") String titulo ,
             @Parameter(name = "deporte", description = "Deporte del entrenamiento a crear", required = true, example = "Ciclismo")
@@ -71,7 +71,11 @@ public class StravaController {
 
         logger.info("Creando entrenamiento");
         Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
-        return stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token));
+        Usuario usuario = usuarioService.usuarioPorToken(token);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(stravaService.crearEntrenamiento(entrenamiento, usuario));
     }
 
     // DEVUELVE LISTA DE SESIONES DE ENTRENAMIENTOS DE USUARIO
@@ -85,12 +89,24 @@ public class StravaController {
     })
     
     @GetMapping("/entrenamientos")
-    public List<Entrenamiento> consultarEntrenamientos(
+    public ResponseEntity<List<Entrenamiento>> consultarEntrenamientos(
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890") 
-    		@RequestBody String token
+    		@RequestParam("token") String token
     ) {
         Usuario usuario = usuarioService.usuarioPorToken(token);
-        return stravaService.consultarEntrenamientos(usuario);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario);
+        List<EntrenamientoDTO> entrenamientosDTO = new ArrayList<>();
+        if (entrenamientos != null) {
+            for (Entrenamiento entrenamiento : entrenamientos) {
+                entrenamientosDTO.add(entrenamientoaDTO(entrenamiento));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(entrenamientos);
     }
 
     // FUNCION PARA CREAR UN RETO
@@ -103,7 +119,7 @@ public class StravaController {
     })
  
     @PostMapping("/reto")
-    public String crearReto(
+    public ResponseEntity<String> crearReto(
             @Parameter(name = "nombre", description = "Nombre del reto a crear", required = true, example = "Reto1")
             @RequestParam("nombre") String nombre,
             @Parameter(name = "deporte", description = "Deporte del reto a crear", required = true, example = "Ciclismo")
@@ -118,7 +134,7 @@ public class StravaController {
             @RequestParam("fechaFin") String fechaFin
             ) {
         Reto reto = new Reto(nombre, deporte, objetivoDistancia, objetivoTiempo, fechaInicio, fechaFin);
-        return stravaService.crearReto(reto);
+        return ResponseEntity.ok(stravaService.crearReto(reto));
     }
 
     // DEVUELVE LISTA DE RETOS ACTIVOS CREADOS POR LA COMUNIDAD (5 AL INICIO)
@@ -129,8 +145,8 @@ public class StravaController {
         @ApiResponse(responseCode = "200", description = "Lista de retos consultada exitosamente")})
 
     @GetMapping("/retos")
-    public List<Reto> consultarRetos() {
-        return stravaService.consultarRetos();
+    public ResponseEntity<List<Reto>> consultarRetos() {
+        return ResponseEntity.ok(stravaService.consultarRetos());
     }
 
     // FUNCION PARA ACEPTAR UN RETO
@@ -142,13 +158,16 @@ public class StravaController {
             @ApiResponse(responseCode = "409", description = "Reto ya aceptado")
     })
     @PostMapping("/retos/{nombreReto}/aceptar")
-    public String aceptarReto(
+    public ResponseEntity<String> aceptarReto(
             @Parameter(name = "nombreReto" ,description = "Nombre del reto a aceptar", required = true, example = "Reto1")
             @PathVariable("nombreReto") String nombreReto,
             @Parameter( name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
             @RequestBody String token) {
         Usuario usuario = usuarioService.usuarioPorToken(token);
-        return stravaService.aceptarReto(nombreReto, usuario);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(stravaService.aceptarReto(nombreReto, usuario));
     }
 
     // FUNCION PARA OBTENER LOS RETOS ACEPTADOS POR EL USUARIO Y SU PROGRESO

@@ -15,7 +15,7 @@ public class StravaService {
 
     //FUNCION PARA CREAR UNA SESIÓN DE ENTRENAMIENTO EN USUARIO
     public String crearEntrenamiento(Entrenamiento entrenamiento, Usuario usuario) {
-        if(entrenamiento != null) {
+        if(entrenamiento != null && usuario != null) {
             usuario.getEntrenamientos().add(entrenamiento);
             return "Entrenamiento creado exitosamente";
         } else{
@@ -26,36 +26,53 @@ public class StravaService {
 
     // OBTENER TODOS LOS ENTRENAMIENTOS DE UN USUARIO
     public List<Entrenamiento> consultarEntrenamientos(Usuario usuario) {
-        return usuario.getEntrenamientos();
+        if(usuario.getEntrenamientos().isEmpty()) {
+            return null;
+        } else {
+            return usuario.getEntrenamientos();
+        }
     }
 
     // OBTENER TODOS LOS RETOS 
     public List<Reto> consultarRetos() {
-        return listaRetos;
+        if (listaRetos.isEmpty()) {
+            return null;
+        } else {
+            return listaRetos;
+        }
     }
 
     public String crearReto(Reto reto) {
         if(reto != null) {
             listaRetos.add(reto);
             return "Reto registrado con éxito"; 
+        } else {
+            return "Reto no puede ser nulo";
         }
-        return "Reto no puede ser nulo";
     }
 
 
     public String aceptarReto(String nombreReto, Usuario usuario) {
-        for (Reto reto : listaRetos) {
-            if (reto.getNombre().equals(nombreReto)) {
-                usuario.getRetosAceptados().add(reto);
-                return "Reto aceptado"; 
+        if (nombreReto != null && usuario != null) {
+            for (Reto reto : listaRetos) {
+                if (reto.getNombre().equals(nombreReto)) {
+                    usuario.getRetosAceptados().add(reto);
+                    return "Reto aceptado con éxito";
+                }
             }
+            return "Reto no encontrado";
+        } else {
+            return "El nombre del reto y el usuario no pueden ser nulos";
         }
-        return "Reto no encontrado";
+        
     }
 
-
-
     public List<Reto> consultarRetosAceptados(Usuario usuario) {
-        return usuario.getRetosAceptados();
+        if(usuario.getRetosAceptados().isEmpty()) {
+            return null;
+        } else {
+            return usuario.getRetosAceptados();
+        }
+        
     }
 }

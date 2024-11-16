@@ -1,14 +1,11 @@
 package es.deusto.sd.strava.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import es.deusto.sd.strava.entity.TipoLogin;
 import es.deusto.sd.strava.entity.Usuario;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 
 import java.util.HashMap;
 import java.util.List;
