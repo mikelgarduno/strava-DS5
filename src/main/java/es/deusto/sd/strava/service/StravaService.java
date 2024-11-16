@@ -31,6 +31,9 @@ public class StravaService {
 
     // OBTENER TODOS LOS RETOS 
     public List<Reto> consultarRetos() {
+        if(listaRetos.isEmpty()) {
+            return null;
+        }
         return listaRetos;
     }
 
@@ -58,4 +61,6 @@ public class StravaService {
     public List<Reto> consultarRetosAceptados(Usuario usuario) {
         return usuario.getRetosAceptados();
     }
+
+    
 }
