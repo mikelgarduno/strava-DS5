@@ -35,18 +35,11 @@ public class StravaService {
 
     // OBTENER TODOS LOS RETOS 
     public List<Reto> consultarRetos() {
-<<<<<<< HEAD
         if (listaRetos.isEmpty()) {
             return null;
         } else {
             return listaRetos;
         }
-=======
-        if(listaRetos.isEmpty()) {
-            return null;
-        }
-        return listaRetos;
->>>>>>> 2bb6a50f5ed91596e8a380648e797fa23b49328c
     }
 
     public String crearReto(Reto reto) {

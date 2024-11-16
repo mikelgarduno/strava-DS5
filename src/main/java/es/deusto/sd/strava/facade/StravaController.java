@@ -89,7 +89,7 @@ public class StravaController {
     })
     
     @GetMapping("/entrenamientos")
-    public ResponseEntity<List<Entrenamiento>> consultarEntrenamientos(
+    public ResponseEntity<List<EntrenamientoDTO>> consultarEntrenamientos(
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890") 
     		@RequestParam("token") String token
     ) {
