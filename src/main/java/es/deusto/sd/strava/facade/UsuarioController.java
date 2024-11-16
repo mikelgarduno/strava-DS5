@@ -41,9 +41,10 @@ public class UsuarioController {
             @ApiResponse(responseCode = "500", description = "Error interno en el servidor"),
             @ApiResponse(responseCode = "401", description = "Las credenciales no son correctas")
         })
+
     @PostMapping("/registroUsuario")
-    public ResponseEntity<String> registrarUsuario(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Contraseña y email del usuario a registrarse", required = true)
+    public ResponseEntity<String> registrarUsuario( //Anotaciones swagger y parametros de entrada de la funcion
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Contraseña, email y método de registro del usuario", required = true)
         @RequestBody UsuarioDTO credenciales,
         @Parameter(name = "nombre", description = "Nombre del usuario a registrar", required = true, example = "Juan12")
         @RequestParam("nombre" ) String nombre,
@@ -55,21 +56,28 @@ public class UsuarioController {
         @RequestParam("altura") float altura,
         @Parameter(name = "frecuenciaCardiacaMax", description = "Frecuencia cardiaca maxima del usuario a registrar",required = false, example = "140")
         @RequestParam("frecuenciaCardiacaMax") int frecuenciaCardiacaMax,
-        @Parameter(name = "frecuenciaCardiacaReposo", description = "Frecuencia cardiaca en reposo del usuario a registrar",required = false, example = "70")
-        @RequestParam("frecuenciaCardiacaReposo") int frecuenciaCardiacaReposo,
-        @Parameter(name = "Tipo de Registro", description = "Que servicio de registro va a usar el usuario",required = true, example = "META")
-        @RequestParam("Tipo de Registro") TipoLogin tipoRegistro
+        @Parameter(name = "frecuenciaCardiacaReposo", description = "Frecuencia cardiaca e<n reposo del usuario a registrar",required = false, example = "70")
+        @RequestParam("frecuenciaCardiacaReposo") int frecuenciaCardiacaReposo
         ) {
-        try {
-            if (usuarioService.esRegistable(credenciales.getEmail(), credenciales.getContrasenya())) {
-                return new ResponseEntity<>("Usuario registrado exitosamente",HttpStatus.OK);
+            if (usuarioService.existeUsuario(credenciales.getEmail())) {
+                return new ResponseEntity<>("El usuario con el correo: " + credenciales.getEmail() + " ya existe",
+                        HttpStatus.CONFLICT);
             } else {
-                return new ResponseEntity<>("La contrasenya o el email no son correctos", HttpStatus.UNAUTHORIZED);
+                try {
+                    if (usuarioService.esRegistable(credenciales.getEmail(), credenciales.getContrasenya(),
+                            credenciales.getTipoLogin())) {
+                        Usuario usuario = new Usuario(nombre, credenciales.getEmail(), peso, altura, fechaNacimiento, frecuenciaCardiacaMax, frecuenciaCardiacaReposo, credenciales.getTipoLogin());
+                        usuarioService.añadirUsuario(usuario);
+                        return new ResponseEntity<>("El usuario: \"" + nombre + "\" con email: \"" + credenciales.getEmail() + "\" registrado exitosamente", HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity<>("La contrasenya o el email no son correctos",
+                                HttpStatus.UNAUTHORIZED);
+                    }
+                } catch (Exception e) {
+                    return ResponseEntity.status(500).build();
+                }
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
         }
-    }
 
     
     //FUNCION PARA HACER LOGIN

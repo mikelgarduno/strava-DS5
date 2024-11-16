@@ -51,12 +51,12 @@ public class DatosMuestra {
 			cristianoRonaldo.setEntrenamientos(entrenamientos);
 			cristianoRonaldo.setRetosAceptados(retos);
 
-			UsuarioService.addUser(usainBolt);
-			UsuarioService.addUser(michaelPhelps);
-			UsuarioService.addUser(serenaWilliams);
-			UsuarioService.addUser(lionelMessi);
-			UsuarioService.addUser(lebronJames);
-			UsuarioService.addUser(cristianoRonaldo);
+			UsuarioService.añadirUsuario(usainBolt);
+			UsuarioService.añadirUsuario(michaelPhelps);
+			UsuarioService.añadirUsuario(serenaWilliams);
+			UsuarioService.añadirUsuario(lionelMessi);
+			UsuarioService.añadirUsuario(lebronJames);
+			UsuarioService.añadirUsuario(cristianoRonaldo);
 			logger.info("Usuarios registrados!");
 
 			stravaService.crearEntrenamiento(carreraMañana,cristianoRonaldo);

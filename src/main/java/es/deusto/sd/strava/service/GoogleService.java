@@ -3,7 +3,7 @@ package es.deusto.sd.strava.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GoogleMetaService {
+public class GoogleService {
 
     // SIMULACION
 

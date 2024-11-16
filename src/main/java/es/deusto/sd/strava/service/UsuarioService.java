@@ -19,12 +19,16 @@ public class UsuarioService {
     private static Map<String, Usuario> tokenes = new HashMap<>(); 
 
     //REGISTRAR USUARIO
-    public Boolean esRegistable(String email, String contraseña) {
-        return GoogleMetaService.comprobarEmailContrasena(email, contraseña);
+    public Boolean esRegistable(String email, String contraseña, TipoLogin tipoLogin) {
+        if(tipoLogin == TipoLogin.GOOGLE) {
+            return GoogleService.comprobarEmailContrasena(email, contraseña);
+        } else {
+            return MetaService.comprobarEmailContrasena(email, contraseña);
+        }
     }
 
     //AÑADIR USUARIO
-      public void addUser(Usuario user) {
+      public void añadirUsuario(Usuario user) {
     	if (user != null) {
     		usuarios.putIfAbsent(user.getEmail(), user);
     	}
@@ -37,8 +41,8 @@ public class UsuarioService {
         usuarios.put(prueba.getEmail(), prueba);
         //Usuario user = usuarios.get(email);
         
-        if (prueba != null && GoogleMetaService.comprobarEmailContrasena(email, password)) {
-            String token = GoogleMetaService.loginToken(email, password);  // Generate a random token for the session
+        if (prueba != null && GoogleService.comprobarEmailContrasena(email, password)) {
+            String token = GoogleService.loginToken(email, password);  // Generate a random token for the session
             tokenes.put(token, prueba);     // Store the token and associate it with the user
 
             return Optional.of(token);
@@ -59,9 +63,23 @@ public class UsuarioService {
         }
     }
     
-    //OBETENER USUARIO POR TOKEN
+    //OBTENER USUARIO POR TOKEN
     public Usuario usuarioPorToken(String token) {
         return tokenes.get(token); 
+    }
+
+    //OBTENER USUARIO POR EMAIL
+    public Optional<Usuario> usuarioPorEmail(String email) {
+        if (!usuarios.containsKey(email)) {
+            return Optional.empty();
+        }else {
+            return Optional.of(usuarios.get(email));
+        }
+    }
+
+    //EXISTE USUARIO
+    public Boolean existeUsuario(String email) {
+        return usuarios.containsKey(email);
     }
 
     // CONSEGUIR TODOS LOS USUARIOS ADMIN
