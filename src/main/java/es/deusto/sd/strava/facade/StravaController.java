@@ -9,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2bb6a50f5ed91596e8a380648e797fa23b49328c
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,11 +74,15 @@ public class StravaController {
 
         logger.info("Creando entrenamiento");
         Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
+<<<<<<< HEAD
         Usuario usuario = usuarioService.usuarioPorToken(token);
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(stravaService.crearEntrenamiento(entrenamiento, usuario));
+=======
+        return ResponseEntity.ok(stravaService.crearEntrenamiento(entrenamiento, usuarioService.usuarioPorToken(token)));
+>>>>>>> 2bb6a50f5ed91596e8a380648e797fa23b49328c
     }
 
     // DEVUELVE LISTA DE SESIONES DE ENTRENAMIENTOS DE USUARIO
@@ -89,10 +96,17 @@ public class StravaController {
     })
     
     @GetMapping("/entrenamientos")
+<<<<<<< HEAD
     public ResponseEntity<List<Entrenamiento>> consultarEntrenamientos(
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890") 
     		@RequestParam("token") String token
     ) {
+=======
+    public ResponseEntity<List<EntrenamientoDTO>> consultarEntrenamientos(
+        @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
+        @RequestParam("token") String token) {
+
+>>>>>>> 2bb6a50f5ed91596e8a380648e797fa23b49328c
         Usuario usuario = usuarioService.usuarioPorToken(token);
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -106,7 +120,11 @@ public class StravaController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+<<<<<<< HEAD
         return ResponseEntity.ok(entrenamientos);
+=======
+        return ResponseEntity.ok(entrenamientosDTO);
+>>>>>>> 2bb6a50f5ed91596e8a380648e797fa23b49328c
     }
 
     // FUNCION PARA CREAR UN RETO
@@ -145,8 +163,17 @@ public class StravaController {
         @ApiResponse(responseCode = "200", description = "Lista de retos consultada exitosamente")})
 
     @GetMapping("/retos")
-    public ResponseEntity<List<Reto>> consultarRetos() {
-        return ResponseEntity.ok(stravaService.consultarRetos());
+    public ResponseEntity<List<RetoDTO>> consultarRetos() {
+        List<Reto> retos = stravaService.consultarRetos();
+        List<RetoDTO> retosDTO = new ArrayList<>();
+        if (retos != null) {
+            for (Reto reto : retos) {
+                retosDTO.add(retoaDTO(reto));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(retosDTO);
     }
 
     // FUNCION PARA ACEPTAR UN RETO
@@ -178,7 +205,7 @@ public class StravaController {
             @ApiResponse(responseCode = "409", description = "Usuario no existe")
     })
     @GetMapping("/retosAceptados")
-    public ResponseEntity<List<Reto>>  consultarRetosAceptados(
+    public ResponseEntity<List<RetoDTO>>  consultarRetosAceptados(
         @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
         @RequestParam("token") String token) {
         Usuario usuario = usuarioService.usuarioPorToken(token);
@@ -194,7 +221,7 @@ public class StravaController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(retos);
+        return ResponseEntity.ok(retosDTO);
     }
 
     // FUNCION PARA PASAR DE RETO A RETO DTO
