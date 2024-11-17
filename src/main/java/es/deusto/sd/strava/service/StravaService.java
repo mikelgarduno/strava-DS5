@@ -1,6 +1,8 @@
 package es.deusto.sd.strava.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -16,24 +18,45 @@ import es.deusto.sd.strava.entity.Usuario;
 public class StravaService {
     List<Reto> listaRetos = new ArrayList<>();
 
-    //FUNCION PARA CREAR UNA SESIÓN DE ENTRENAMIENTO EN USUARIO
+    // FUNCION PARA CREAR UNA SESIÓN DE ENTRENAMIENTO EN USUARIO
     public String crearEntrenamiento(Entrenamiento entrenamiento, Usuario usuario) {
         usuario.getEntrenamientos().add(entrenamiento);
         return "El entremaniento \"" + entrenamiento.getTitulo() + "\" ha sido registrado con éxito";
     }
-    
 
     // OBTENER TODOS LOS ENTRENAMIENTOS DE UN USUARIO
-    public List<Entrenamiento> consultarEntrenamientos(Usuario usuario, String fechaInicio, String fechaFin) {
-        if(usuario.getEntrenamientos().isEmpty()) {
-            return null;
-        } else {
-            List<Entrenamiento> entrenamientos = usuario.getEntrenamientos();
-            return entrenamientos;
+    public List<Entrenamiento> consultarEntrenamientos(Usuario usuario, LocalDate fechaInicio, LocalDate fechaFin) {
+        // Validar que el usuario tiene entrenamientos
+        if (usuario.getEntrenamientos().isEmpty()) {
+            return new ArrayList<>(); // Retorna lista vacía si no hay entrenamientos
         }
+        // Filtrar entrenamientos por rango de fechas
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        List<Entrenamiento> entrenamientosFiltrados = new ArrayList<>();
+
+        for (Entrenamiento entrenamiento : usuario.getEntrenamientos()) {
+            LocalDate fechaEntrenamiento = LocalDate.parse(entrenamiento.getFechaInicio(), formatter);
+
+            if (!fechaEntrenamiento.isBefore(fechaInicio) && !fechaEntrenamiento.isAfter(fechaFin)) {
+                entrenamientosFiltrados.add(entrenamiento);
+            }
+        }
+
+        // Ordenar por fecha descendente
+        entrenamientosFiltrados.sort((e1, e2) -> {
+            LocalDate fecha1 = LocalDate.parse(e1.getFechaInicio(), formatter);
+            LocalDate fecha2 = LocalDate.parse(e2.getFechaInicio(), formatter);
+            return fecha2.compareTo(fecha1); // Descendente
+        });
+        // Limitar a los 5 más recientes
+        if (entrenamientosFiltrados.size() > 5) {
+            return entrenamientosFiltrados.subList(0, 5);
+        }
+
+        return entrenamientosFiltrados;
     }
 
-    // OBTENER TODOS LOS RETOS 
+    // OBTENER TODOS LOS RETOS
     public List<Reto> consultarRetos() {
         if (listaRetos.isEmpty()) {
             return null;
@@ -49,7 +72,7 @@ public class StravaService {
         for (Reto reto : listaRetos) {
             LocalDate fechaFin = LocalDate.parse(reto.getFechaFin());
             if (fechaFin.isAfter(fechaHoy)) {
-                retosActivos.add(reto); 
+                retosActivos.add(reto);
             }
         }
 
@@ -57,34 +80,34 @@ public class StravaService {
         if (fecha != null && !fecha.isEmpty()) {
             LocalDate fechaFiltro = LocalDate.parse(fecha);
             retosActivos = retosActivos.stream()
-                                       .filter(reto -> LocalDate.parse(reto.getFechaInicio()).isEqual(fechaFiltro) || LocalDate.parse(reto.getFechaInicio()).isAfter(fechaFiltro))
-                                       .collect(Collectors.toList());
+                    .filter(reto -> LocalDate.parse(reto.getFechaInicio()).isEqual(fechaFiltro)
+                            || LocalDate.parse(reto.getFechaInicio()).isAfter(fechaFiltro))
+                    .collect(Collectors.toList());
         }
 
         // Filtrar por deporte si se proporciona
         if (deporte != null && !deporte.isEmpty()) {
             retosActivos = retosActivos.stream()
-                                       .filter(reto -> reto.getDeporte().equalsIgnoreCase(deporte))
-                                       .collect(Collectors.toList());
+                    .filter(reto -> reto.getDeporte().equalsIgnoreCase(deporte))
+                    .collect(Collectors.toList());
         }
 
         // Devolver solo los 5 retos más recientes
         return retosActivos.stream()
-        .sorted(Comparator.comparing(Reto::getFechaInicio).reversed()) // Ordenar por fecha de inicio, descendente
-        .limit(5) // Solo los 5 más recientes
-        .collect(Collectors.toList());
+                .sorted(Comparator.comparing(Reto::getFechaInicio).reversed()) // Ordenar por fecha de inicio,
+                                                                               // descendente
+                .limit(5) // Solo los 5 más recientes
+                .collect(Collectors.toList());
     }
 
-
     public String crearReto(Reto reto) {
-        if(reto != null) {
+        if (reto != null) {
             listaRetos.add(reto);
-            return "Reto registrado con éxito"; 
+            return "Reto registrado con éxito";
         } else {
             return "Reto no puede ser nulo";
         }
     }
-
 
     public String aceptarReto(String nombreReto, Usuario usuario) {
         if (nombreReto != null && usuario != null) {
@@ -98,17 +121,16 @@ public class StravaService {
         } else {
             return "El nombre del reto y el usuario no pueden ser nulos";
         }
-        
+
     }
 
     public List<Reto> consultarRetosAceptados(Usuario usuario) {
-        if(usuario.getRetosAceptados().isEmpty()) {
+        if (usuario.getRetosAceptados().isEmpty()) {
             return null;
         } else {
             return usuario.getRetosAceptados();
         }
-        
+
     }
 
-    
 }

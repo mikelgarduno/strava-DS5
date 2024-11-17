@@ -1,5 +1,8 @@
 package es.deusto.sd.strava.facade;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +31,6 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +38,7 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/api")
 @Tag(name = "API de Simulación de Strava", description = "Gestión de usuarios, entrenamientos y retos")
 public class StravaController {
-
     private static final Logger logger = LoggerFactory.getLogger(StravaController.class);
-
     @Autowired
     private StravaService stravaService;
 
@@ -96,22 +96,37 @@ public class StravaController {
             @Parameter(name = "fechaFin", description = "Fecha de fin para filtrar los entrenamientos", example = "12/12/2022")
             @PathVariable("fechaFin") String fechaFin) {
 
-        Usuario usuario = usuarioService.usuarioPorToken(token);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    Usuario usuario = usuarioService.usuarioPorToken(token);
+    if (usuario == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 
-        List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario, fechaInicio, fechaFin);
+     try {
+        // Formateador para fechas con el formato dd/MM/yyyy
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        logger.info("Fecha inicio: " + fechaInicio);
+        logger.info("Fecha fin: " + fechaFin);
+
+        // Parseo de las fechas de inicio y fin
+        LocalDate inicio = LocalDate.parse(fechaInicio, formatter);
+        LocalDate fin = LocalDate.parse(fechaFin, formatter);
+
+        // Consultar los entrenamientos en el rango
+        List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario, inicio, fin);
+
+        // Convertir a DTOs
         List<EntrenamientoDTO> entrenamientosDTO = new ArrayList<>();
-        if (entrenamientos != null) {
-            for (Entrenamiento entrenamiento : entrenamientos) {
-                entrenamientosDTO.add(entrenamientoaDTO(entrenamiento));
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        for (Entrenamiento entrenamiento : entrenamientos) {
+            entrenamientosDTO.add(entrenamientoaDTO(entrenamiento));
         }
         return ResponseEntity.ok(entrenamientosDTO);
+    } catch (DateTimeParseException e) {
+        // Manejo de error si las fechas no son válidas
+        logger.info("Fecha inicio: " + fechaInicio);
+        logger.info("Fecha fin: " + fechaFin);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+}
 
     // FUNCION PARA CREAR UN RETO
     @Operation(summary = "Crear un nuevo reto", description = "Permite crear un nuevo reto", 
