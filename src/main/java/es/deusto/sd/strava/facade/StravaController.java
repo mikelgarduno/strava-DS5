@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,11 +64,11 @@ public class StravaController {
             @Parameter(name = "duracion", description = "Duración del entrenamiento a crear", required = true, example = "60")
             @RequestParam("duracion") int duracion,
             @Parameter(name = "fechaInicio", description = "Fecha de inicio del entrenamiento a crear", required = true, example = "12/12/2021")
-            @RequestParam("fechaInicio") String fechaInicio,
+            @RequestParam("fechaInicio") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaInicio,
             @Parameter(name = "horaInicio", description = "Hora de inicio del entrenamiento a crear", required = true, example = "12:00")
             @RequestParam("horaInicio") String horaInicio,
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
-    		@RequestParam("token") String token) {
+            @RequestParam("token") String token) {
 
         Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
         Usuario usuario = usuarioService.usuarioPorToken(token);
@@ -91,41 +92,25 @@ public class StravaController {
     public ResponseEntity<List<EntrenamientoDTO>> consultarEntrenamientos(
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890") 
     		@RequestParam("token") String token,
-            @Parameter(name = "fechaInicio", description = "Fecha de inicio para filtrar los entrenamientos", example = "12/12/2021")
-            @PathVariable("fechaInicio") String fechaInicio,
-            @Parameter(name = "fechaFin", description = "Fecha de fin para filtrar los entrenamientos", example = "12/12/2022")
-            @PathVariable("fechaFin") String fechaFin) {
+            @RequestParam("fechaInicio") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaInicio,
+            @RequestParam("fechaFin") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaFin) {
 
     Usuario usuario = usuarioService.usuarioPorToken(token);
     if (usuario == null) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-     try {
-        // Formateador para fechas con el formato dd/MM/yyyy
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        logger.info("Fecha inicio: " + fechaInicio);
-        logger.info("Fecha fin: " + fechaFin);
-
-        // Parseo de las fechas de inicio y fin
-        LocalDate inicio = LocalDate.parse(fechaInicio, formatter);
-        LocalDate fin = LocalDate.parse(fechaFin, formatter);
-
-        // Consultar los entrenamientos en el rango
-        List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario, inicio, fin);
-
-        // Convertir a DTOs
-        List<EntrenamientoDTO> entrenamientosDTO = new ArrayList<>();
+    List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario, fechaInicio, fechaFin);
+    List<EntrenamientoDTO> entrenamientosDTO = new ArrayList<>();
+    if (entrenamientos != null) {
         for (Entrenamiento entrenamiento : entrenamientos) {
             entrenamientosDTO.add(entrenamientoaDTO(entrenamiento));
         }
-        return ResponseEntity.ok(entrenamientosDTO);
-    } catch (DateTimeParseException e) {
-        // Manejo de error si las fechas no son válidas
-        logger.info("Fecha inicio: " + fechaInicio);
-        logger.info("Fecha fin: " + fechaFin);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+    return ResponseEntity.ok(entrenamientosDTO);
+
 }
 
     // FUNCION PARA CREAR UN RETO

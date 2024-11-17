@@ -1,17 +1,19 @@
 package es.deusto.sd.strava.dto;
 
+import java.time.LocalDate;
+
 public class EntrenamientoDTO {
     private String titulo;
     private String deporte;
     private float distancia;
     private int duracion;
-    private String fechaInicio;
+    private LocalDate fechaInicio;
     private String horaInicio;
 
     public EntrenamientoDTO() {
     }
 
-    public EntrenamientoDTO(String titulo, String deporte, float distancia, int duracion, String fechaInicio,
+    public EntrenamientoDTO(String titulo, String deporte, float distancia, int duracion, LocalDate fechaInicio,
             String horaInicio) {
         this.titulo = titulo;
         this.deporte = deporte;
@@ -53,11 +55,11 @@ public class EntrenamientoDTO {
         this.duracion = duracion;
     }
 
-    public String getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(String fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 

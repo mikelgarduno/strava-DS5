@@ -2,6 +2,7 @@ package es.deusto.sd.strava;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,8 @@ public class DatosMuestra {
 		return args -> {			
 
 			// Entrenamientos de muestra
-			Entrenamiento carreraMañana = new Entrenamiento("Carrera Matutina", "Correr", 5.0f, 30, "2024-01-02", "08:00");
-			Entrenamiento ciclismoRuta = new Entrenamiento("Ruta en Bicicleta", "Ciclismo", 20.0f, 60, "2024-01-03", "10:00");
+			Entrenamiento carreraMañana = new Entrenamiento("Carrera Matutina", "Correr", 5.0f, 30, LocalDate.of(2024, 1, 2), "08:00");
+			Entrenamiento ciclismoRuta = new Entrenamiento("Ruta en Bicicleta", "Ciclismo", 20.0f, 60, LocalDate.of(2024, 1, 3), "10:00");
 			List<Entrenamiento> entrenamientos = new ArrayList<Entrenamiento>();
 
 			// Retos de muestra

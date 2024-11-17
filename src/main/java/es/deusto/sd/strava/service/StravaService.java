@@ -31,29 +31,22 @@ public class StravaService {
             return new ArrayList<>(); // Retorna lista vacía si no hay entrenamientos
         }
         // Filtrar entrenamientos por rango de fechas
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         List<Entrenamiento> entrenamientosFiltrados = new ArrayList<>();
-
         for (Entrenamiento entrenamiento : usuario.getEntrenamientos()) {
-            LocalDate fechaEntrenamiento = LocalDate.parse(entrenamiento.getFechaInicio(), formatter);
-
-            if (!fechaEntrenamiento.isBefore(fechaInicio) && !fechaEntrenamiento.isAfter(fechaFin)) {
+            LocalDate fechaEntrenamiento = entrenamiento.getFechaInicio();
+            if (fechaEntrenamiento.isAfter(fechaInicio) && fechaEntrenamiento.isBefore(fechaFin)) {
                 entrenamientosFiltrados.add(entrenamiento);
             }
         }
+        // Ordenar los entrenamientos por fecha de inicio de manera descendente
+        entrenamientosFiltrados.sort((e1, e2) -> e2.getFechaInicio().compareTo(e1.getFechaInicio()));
 
-        // Ordenar por fecha descendente
-        entrenamientosFiltrados.sort((e1, e2) -> {
-            LocalDate fecha1 = LocalDate.parse(e1.getFechaInicio(), formatter);
-            LocalDate fecha2 = LocalDate.parse(e2.getFechaInicio(), formatter);
-            return fecha2.compareTo(fecha1); // Descendente
-        });
-        // Limitar a los 5 más recientes
+        // Limitar la lista a los 5 entrenamientos más recientes
         if (entrenamientosFiltrados.size() > 5) {
             return entrenamientosFiltrados.subList(0, 5);
         }
-
         return entrenamientosFiltrados;
+
     }
 
     // OBTENER TODOS LOS RETOS
