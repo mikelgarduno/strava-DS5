@@ -1,8 +1,7 @@
 package es.deusto.sd.strava.facade;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import es.deusto.sd.strava.service.StravaService;
 import es.deusto.sd.strava.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -39,7 +38,7 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/api")
 @Tag(name = "API de Simulación de Strava", description = "Gestión de usuarios, entrenamientos y retos")
 public class StravaController {
-    private static final Logger logger = LoggerFactory.getLogger(StravaController.class);
+
     @Autowired
     private StravaService stravaService;
 
