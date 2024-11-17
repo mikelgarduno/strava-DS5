@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -228,11 +229,16 @@ public class StravaController {
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        List<Reto> retos = stravaService.consultarRetosAceptados(usuario);
+        
+        Map<Reto,Integer> retos = stravaService.consultarRetosActivosConProgreso(usuario);
         List<RetoDTO> retosDTO = new ArrayList<>();
         if (retos != null) {
-            for (Reto reto : retos) {
-                retosDTO.add(retoaDTO(reto));
+            for (Map.Entry<Reto, Integer> entry : retos.entrySet()) {
+                Reto reto = entry.getKey();
+                Integer progreso = entry.getValue();
+                RetoDTO retoDTO = retoaDTO(reto);
+                retoDTO.setProgreso(progreso);
+                retosDTO.add(retoDTO);
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

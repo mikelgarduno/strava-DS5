@@ -4,8 +4,9 @@ import java.time.LocalDate;
 
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import org.springframework.stereotype.Service;
@@ -76,10 +77,6 @@ public class StravaService {
 
     }
 
-
-
-
-
     public String crearReto(Reto reto) {
         if (reto != null) {
             listaRetos.add(reto);
@@ -111,6 +108,45 @@ public class StravaService {
             return usuario.getRetosAceptados();
         }
 
+    }
+
+    //funcion para consultar los retos activos de un usuario junto al progreso de cada uno( segun los entrenamientos que ha realizado durante las fechas del reto)
+    public Map<Reto,Integer> consultarRetosActivosConProgreso(Usuario usuario) {
+        LocalDate fecha = LocalDate.now();
+        Map<Reto,Integer> retosActivos = new HashMap<>();
+
+        if(usuario.getRetosAceptados().isEmpty()){  //Si el usuario no tiene retos aceptados o entrenamientos
+            return retosActivos;
+        }
+
+        for (Reto reto : usuario.getRetosAceptados()) {  //Recorremos los retos aceptados por el usuario
+            int progreso = 0;
+            
+            if (reto.getFechaFin().isAfter(fecha)) {    //Si el reto no ha finalizado
+                
+                for (Entrenamiento entrenamiento : usuario.getEntrenamientos()) {  //Recorremos los entrenamientos del usuario
+                   
+                    if (entrenamiento.getFechaInicio().isAfter(reto.getFechaInicio())   //Si el entrenamiento se ha realizado durante las fechas del reto
+                            && entrenamiento.getFechaInicio().isBefore(reto.getFechaFin())) {   
+                        
+                        if(reto.getObjetivoDistancia() > 0){   //Si el reto es de distancia
+                            progreso += entrenamiento.getDistancia();
+                        }else{
+                            progreso += entrenamiento.getDuracion(); 
+                        }
+                    }
+                }
+
+                int porcentaje = 0;
+                if (reto.getObjetivoDistancia() > 0) { //Si el reto es de distancia
+                    porcentaje = (int) ((progreso * 100) / reto.getObjetivoDistancia()); //Calculamos el porcentaje de progreso
+                }else{
+                    porcentaje = (progreso*100)/reto.getObjetivoTiempo(); //Calculamos el porcentaje de progreso
+                }
+                retosActivos.put(reto, porcentaje); //Añadimos el reto y su progreso al mapa
+            }
+        }
+        return retosActivos;
     }
 
 }
