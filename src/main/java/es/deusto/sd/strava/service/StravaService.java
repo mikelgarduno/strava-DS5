@@ -18,12 +18,8 @@ public class StravaService {
 
     //FUNCION PARA CREAR UNA SESIÓN DE ENTRENAMIENTO EN USUARIO
     public String crearEntrenamiento(Entrenamiento entrenamiento, Usuario usuario) {
-        if(entrenamiento != null && usuario != null) {
-            usuario.getEntrenamientos().add(entrenamiento);
-            return "Entrenamiento creado exitosamente";
-        } else{
-            return "Entrenamiento no puede ser nulo";
-        }
+        usuario.getEntrenamientos().add(entrenamiento);
+        return "El entremaniento \"" + entrenamiento.getTitulo() + "\" ha sido registrado con éxito";
     }
     
 

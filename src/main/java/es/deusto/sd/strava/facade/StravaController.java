@@ -48,9 +48,8 @@ public class StravaController {
     // FUNCION PARA CREAR UNA SESION DE ENTRENAMIENTO EN USUARIO
     @Operation(summary = "Crear un nuevo entrenamiento", description = "Permite crear una nueva sesión de entrenamiento de un usuario", responses = {
             @ApiResponse(responseCode = "200", description = "Entrenamiento creado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Entrenamiento no puede ser nulo"),
             @ApiResponse(responseCode = "500", description = "Error interno en el servidor"),
-            @ApiResponse(responseCode = "409", description = "Entrenamiento ya existe")
+            @ApiResponse(responseCode = "401", description = "Usuario no autorizado")
     })
 
     @PostMapping("/entrenamiento")
@@ -70,7 +69,6 @@ public class StravaController {
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890")
     		@RequestParam("token") String token) {
 
-        logger.info("Creando entrenamiento");
         Entrenamiento entrenamiento = new Entrenamiento(titulo, deporte, distancia, duracion, fechaInicio, horaInicio);
         Usuario usuario = usuarioService.usuarioPorToken(token);
         if (usuario == null) {
