@@ -94,4 +94,6 @@ public class Entrenamiento {
         return Objects.hash(titulo, horaInicio);
     }
 
+
+
 }

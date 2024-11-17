@@ -82,21 +82,26 @@ public class StravaController {
      description = "Devuelve la lista completa de entrenamientos realizados por el usuario",
      responses = {
             @ApiResponse(responseCode = "200", description = "Lista de entrenamientos consultada exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Usuario no puede ser nulo"),
             @ApiResponse(responseCode = "500", description = "Error interno en el servidor"),
-            @ApiResponse(responseCode = "409", description = "Usuario no existe")
+            @ApiResponse(responseCode = "409", description = "Usuario no existe"),
+            @ApiResponse(responseCode = "401", description = "Usuario no autorizado")
     })
     
-    @GetMapping("/entrenamientos")
+    @GetMapping("/entrenamientos/{fechaInicio}/{fechaFin}")
     public ResponseEntity<List<EntrenamientoDTO>> consultarEntrenamientos(
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890") 
-    		@RequestParam("token") String token
-    ) {
+    		@RequestParam("token") String token,
+            @Parameter(name = "fechaInicio", description = "Fecha de inicio para filtrar los entrenamientos", example = "12/12/2021")
+            @PathVariable("fechaInicio") String fechaInicio,
+            @Parameter(name = "fechaFin", description = "Fecha de fin para filtrar los entrenamientos", example = "12/12/2022")
+            @PathVariable("fechaFin") String fechaFin) {
+
         Usuario usuario = usuarioService.usuarioPorToken(token);
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario);
+
+        List<Entrenamiento> entrenamientos = stravaService.consultarEntrenamientos(usuario, fechaInicio, fechaFin);
         List<EntrenamientoDTO> entrenamientosDTO = new ArrayList<>();
         if (entrenamientos != null) {
             for (Entrenamiento entrenamiento : entrenamientos) {

@@ -24,11 +24,12 @@ public class StravaService {
     
 
     // OBTENER TODOS LOS ENTRENAMIENTOS DE UN USUARIO
-    public List<Entrenamiento> consultarEntrenamientos(Usuario usuario) {
+    public List<Entrenamiento> consultarEntrenamientos(Usuario usuario, String fechaInicio, String fechaFin) {
         if(usuario.getEntrenamientos().isEmpty()) {
             return null;
         } else {
-            return usuario.getEntrenamientos();
+            List<Entrenamiento> entrenamientos = usuario.getEntrenamientos();
+            return entrenamientos;
         }
     }
 
