@@ -1,7 +1,10 @@
 package es.deusto.sd.strava.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -41,6 +44,40 @@ public class StravaService {
             return listaRetos;
         }
     }
+
+    public List<Reto> consultarRetosActivos(String fecha, String deporte) {
+        // Filtrar retos activos que no han finalizado
+        LocalDate fechaHoy = LocalDate.now();
+        List<Reto> retosActivos = new ArrayList<>();
+        for (Reto reto : listaRetos) {
+            LocalDate fechaFin = LocalDate.parse(reto.getFechaFin());
+            if (fechaFin.isAfter(fechaHoy)) {
+                retosActivos.add(reto); 
+            }
+        }
+
+        // Filtrar por fecha si se proporciona
+        if (fecha != null && !fecha.isEmpty()) {
+            LocalDate fechaFiltro = LocalDate.parse(fecha);
+            retosActivos = retosActivos.stream()
+                                       .filter(reto -> LocalDate.parse(reto.getFechaInicio()).isEqual(fechaFiltro) || LocalDate.parse(reto.getFechaInicio()).isAfter(fechaFiltro))
+                                       .collect(Collectors.toList());
+        }
+
+        // Filtrar por deporte si se proporciona
+        if (deporte != null && !deporte.isEmpty()) {
+            retosActivos = retosActivos.stream()
+                                       .filter(reto -> reto.getDeporte().equalsIgnoreCase(deporte))
+                                       .collect(Collectors.toList());
+        }
+
+        // Devolver solo los 5 retos más recientes
+        return retosActivos.stream()
+        .sorted(Comparator.comparing(Reto::getFechaInicio).reversed()) // Ordenar por fecha de inicio, descendente
+        .limit(5) // Solo los 5 más recientes
+        .collect(Collectors.toList());
+    }
+
 
     public String crearReto(Reto reto) {
         if(reto != null) {

@@ -24,6 +24,7 @@ import es.deusto.sd.strava.service.StravaService;
 import es.deusto.sd.strava.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -157,6 +158,57 @@ public class StravaController {
         }
         return ResponseEntity.ok(retosDTO);
     }
+
+
+    @Operation(
+        summary = "Consultar todos los retos activos",
+        description = "Devuelve los retos activos que no han finalizado, con la opción de obtener los 5 más recientes o filtrarlos por fecha o deporte.",
+        parameters = {
+            @Parameter(
+                name = "fecha",
+                description = "Fecha para filtrar los retos por fecha de inicio",
+                required = false,
+                example = "2024-11-01",
+                in = ParameterIn.QUERY
+            ),
+            @Parameter(
+                name = "deporte",
+                description = "Deporte para filtrar los retos por tipo de deporte",
+                required = false,
+                example = "ciclismo",
+                in = ParameterIn.QUERY
+            )
+        },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Lista de retos activos consultada exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Parámetros incorrectos"),
+            @ApiResponse(responseCode = "500", description = "Error interno en el servidor")
+        }
+    )
+
+    @GetMapping("/retosActivos")
+    public ResponseEntity<List<RetoDTO>> consultarRetosActivos(
+            @RequestParam(value = "fecha", required = false) String fecha,
+            @RequestParam(value = "deporte", required = false) String deporte) {
+
+        try {
+            List<Reto> retos = stravaService.consultarRetosActivos(fecha, deporte);
+            List<RetoDTO> retosDTO= new ArrayList<>();
+            for (Reto reto : retos) {
+                retosDTO.add(retoaDTO(reto));
+            }
+            
+            if (retos.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            return ResponseEntity.ok(retosDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
 
     // FUNCION PARA ACEPTAR UN RETO
     @Operation(summary = "Aceptar un reto", description = "Permite aceptar un reto de la comunidad",
