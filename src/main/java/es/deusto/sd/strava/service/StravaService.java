@@ -58,40 +58,27 @@ public class StravaService {
         }
     }
 
-    public List<Reto> consultarRetosActivos(String fecha, String deporte) {
-        // Filtrar retos activos que no han finalizado
-        LocalDate fechaHoy = LocalDate.now();
+    public List<Reto> consultarRetosActivos(LocalDate fecha, String deporte) {
         List<Reto> retosActivos = new ArrayList<>();
         for (Reto reto : listaRetos) {
-            LocalDate fechaFin = LocalDate.parse(reto.getFechaFin());
-            if (fechaFin.isAfter(fechaHoy)) {
-                retosActivos.add(reto);
+            if (reto.getFechaFin().isAfter(fecha)) {
+                // Si se especifica deporte, filtrar también por deporte
+                if (deporte == null || reto.getDeporte().equalsIgnoreCase(deporte)) {
+                    retosActivos.add(reto);
+                }
             }
         }
-
-        // Filtrar por fecha si se proporciona
-        if (fecha != null && !fecha.isEmpty()) {
-            LocalDate fechaFiltro = LocalDate.parse(fecha);
-            retosActivos = retosActivos.stream()
-                    .filter(reto -> LocalDate.parse(reto.getFechaInicio()).isEqual(fechaFiltro)
-                            || LocalDate.parse(reto.getFechaInicio()).isAfter(fechaFiltro))
-                    .collect(Collectors.toList());
+        retosActivos.sort((r1, r2) -> r2.getFechaInicio().compareTo(r1.getFechaInicio()));
+        if (retosActivos.size() > 5) {
+            return retosActivos.subList(0, 5);
         }
+        return retosActivos;
 
-        // Filtrar por deporte si se proporciona
-        if (deporte != null && !deporte.isEmpty()) {
-            retosActivos = retosActivos.stream()
-                    .filter(reto -> reto.getDeporte().equalsIgnoreCase(deporte))
-                    .collect(Collectors.toList());
-        }
-
-        // Devolver solo los 5 retos más recientes
-        return retosActivos.stream()
-                .sorted(Comparator.comparing(Reto::getFechaInicio).reversed()) // Ordenar por fecha de inicio,
-                                                                               // descendente
-                .limit(5) // Solo los 5 más recientes
-                .collect(Collectors.toList());
     }
+
+
+
+
 
     public String crearReto(Reto reto) {
         if (reto != null) {

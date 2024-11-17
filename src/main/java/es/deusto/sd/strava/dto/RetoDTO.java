@@ -1,19 +1,21 @@
 package es.deusto.sd.strava.dto;
 
+import java.time.LocalDate;
+
 public class RetoDTO {
     private String nombre;
     private String deporte;
     private float objetivoDistancia;
     private int objetivoTiempo;
-    private String fechaInicio;
-    private String fechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private int Progreso;
 
     public RetoDTO() {
     }
 
     public RetoDTO(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo,
-            String fechaInicio, String fechaFin, int Progreso) {
+    LocalDate fechaInicio, LocalDate fechaFin, int Progreso) {
         this.nombre = nombre;
         this.deporte = deporte;
         this.objetivoDistancia = objetivoDistancia;
@@ -55,19 +57,19 @@ public class RetoDTO {
         this.objetivoTiempo = objetivoTiempo;
     }
 
-    public String getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(String fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public String getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(String fechaFin) {
+    public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
 

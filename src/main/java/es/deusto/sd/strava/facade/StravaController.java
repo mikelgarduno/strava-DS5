@@ -92,7 +92,9 @@ public class StravaController {
     public ResponseEntity<List<EntrenamientoDTO>> consultarEntrenamientos(
             @Parameter(name= "token", description = "Token de autorizacion", required = true, example = "1234567890") 
     		@RequestParam("token") String token,
+            @Parameter(name = "fechaInicio", description = "Fecha de inicio para filtrar los entrenamientos", required = true, example = "12/12/2021")
             @RequestParam("fechaInicio") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaInicio,
+            @Parameter(name = "fechaFin", description = "Fecha de fin para filtrar los entrenamientos", required = true, example = "12/12/2021")
             @RequestParam("fechaFin") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaFin) {
 
     Usuario usuario = usuarioService.usuarioPorToken(token);
@@ -132,10 +134,10 @@ public class StravaController {
             @RequestParam("objetivoDistancia") float objetivoDistancia,
             @Parameter(name = "objetivoTiempo", description = "Tiempo objetivo del reto a crear", required = true, example = "60")
             @RequestParam("objetivoTiempo") int objetivoTiempo,
-            @Parameter(name = "fechaInicio", description = "Fecha de inicio del reto a crear", required = true, example = "12/12/2021")
-            @RequestParam("fechaInicio") String fechaInicio,
-            @Parameter(name = "fechaFin", description = "Fecha de fin del reto a crear", required = true, example = "12/12/2021")
-            @RequestParam("fechaFin") String fechaFin
+            @Parameter(name = "fechaInicio", description = "Fecha de inicio para filtrar los entrenamientos", required = true, example = "12/12/2021")
+            @RequestParam("fechaInicio") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaInicio,
+            @Parameter(name = "fechaFin", description = "Fecha de fin para filtrar los entrenamientos", required = true, example = "12/12/2021")
+            @RequestParam("fechaFin") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fechaFin
             ) {
         Reto reto = new Reto(nombre, deporte, objetivoDistancia, objetivoTiempo, fechaInicio, fechaFin);
         return ResponseEntity.ok(stravaService.crearReto(reto));
@@ -162,55 +164,35 @@ public class StravaController {
         return ResponseEntity.ok(retosDTO);
     }
 
-
-    @Operation(
-        summary = "Consultar todos los retos activos",
-        description = "Devuelve los retos activos que no han finalizado, con la opción de obtener los 5 más recientes o filtrarlos por fecha o deporte.",
-        parameters = {
-            @Parameter(
-                name = "fecha",
-                description = "Fecha para filtrar los retos por fecha de inicio",
-                required = false,
-                example = "2024-11-01",
-                in = ParameterIn.QUERY
-            ),
-            @Parameter(
-                name = "deporte",
-                description = "Deporte para filtrar los retos por tipo de deporte",
-                required = false,
-                example = "ciclismo",
-                in = ParameterIn.QUERY
-            )
-        },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Lista de retos activos consultada exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Parámetros incorrectos"),
-            @ApiResponse(responseCode = "500", description = "Error interno en el servidor")
-        }
-    )
-
-    @GetMapping("/retosActivos")
+    @Operation(summary = "Consultar todos los retos activos", description = "Devuelve la lista de retos activos (no finalizados)",
+    responses = {
+        @ApiResponse(responseCode = "400", description = "Fecha o deporte inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno en el servidor"),
+        @ApiResponse(responseCode = "200", description = "Lista de retos activos consultada exitosamente")})
+    @
+    GetMapping("/retosActivos")
     public ResponseEntity<List<RetoDTO>> consultarRetosActivos(
-            @RequestParam(value = "fecha", required = false) String fecha,
+            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fecha,
             @RequestParam(value = "deporte", required = false) String deporte) {
-
-        try {
-            List<Reto> retos = stravaService.consultarRetosActivos(fecha, deporte);
-            List<RetoDTO> retosDTO= new ArrayList<>();
+    
+        // Si no se proporciona una fecha, se usa la fecha actual
+        if (fecha == null) {
+            fecha = LocalDate.now();
+        }
+    
+        List<Reto> retos = stravaService.consultarRetosActivos(fecha, deporte);
+        List<RetoDTO> retosDTO = new ArrayList<>();
+    
+        if (retos != null) {
             for (Reto reto : retos) {
                 retosDTO.add(retoaDTO(reto));
             }
-            
-            if (retos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
-            return ResponseEntity.ok(retosDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    
+        return ResponseEntity.ok(retosDTO);
     }
-
 
 
     // FUNCION PARA ACEPTAR UN RETO

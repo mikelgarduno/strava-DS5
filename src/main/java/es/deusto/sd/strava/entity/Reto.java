@@ -1,5 +1,6 @@
 package es.deusto.sd.strava.entity;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Reto {
@@ -7,14 +8,14 @@ public class Reto {
     private String deporte;
     private float objetivoDistancia;
     private int objetivoTiempo;
-    private String fechaInicio;
-    private String fechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 
     public Reto() {
     }
 
     public Reto(String nombre, String deporte, float objetivoDistancia, int objetivoTiempo,
-            String fechaInicio, String fechaFin) {
+    LocalDate fechaInicio, LocalDate fechaFin) {
         this.nombre = nombre;
         this.deporte = deporte;
         this.objetivoDistancia = objetivoDistancia;
@@ -55,19 +56,19 @@ public class Reto {
         this.objetivoTiempo = objetivoTiempo;
     }
 
-    public String getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(String fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public String getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(String fechaFin) {
+    public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
 
