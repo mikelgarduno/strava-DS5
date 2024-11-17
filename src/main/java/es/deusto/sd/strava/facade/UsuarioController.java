@@ -95,18 +95,20 @@ public class UsuarioController {
     public ResponseEntity<String> login(
         @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Contraseña, email y tipo de login del usuario", required = true)
         @RequestBody UsuarioDTO credenciales) 
-        {    
-            if (!usuarioService.existeUsuario(credenciales.getEmail())) {
-                return new ResponseEntity<>("El usuario con el correo: " + credenciales.getEmail() + " no existe, es necesario registrarse",
-                        HttpStatus.CONFLICT);
+      {
+        if (!usuarioService.existeUsuario(credenciales.getEmail())) {
+            return new ResponseEntity<>(
+                    "El usuario con el correo: \"" + credenciales.getEmail() + "\" no existe,antes es necesario registrarse",
+                    HttpStatus.CONFLICT);
+        } else {
+            Optional<String> token = usuarioService.login(credenciales.getEmail(), credenciales.getContrasenya(),
+                    credenciales.getTipoLogin());
+            if (token.isPresent()) {
+                return new ResponseEntity<>(token.get(), HttpStatus.OK);
             } else {
-                Optional<String> token = usuarioService.login(credenciales.getEmail(), credenciales.getContrasenya(), credenciales.getTipoLogin());
-                if (token.isPresent()) {
-                    return new ResponseEntity<>(token.get(), HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("El correo o la contraseña no son correctos",HttpStatus.UNAUTHORIZED);
-                }
-    }
+                return new ResponseEntity<>("El correo o la contraseña no son correctos", HttpStatus.UNAUTHORIZED);
+            }
+        }
     }
 
     // FUNCION PARA HACER LOGOUT
@@ -114,16 +116,15 @@ public class UsuarioController {
         summary = "Cerrar sesión del sistema",
         description = "Permite a un usuario cerrar sesión proporcionando el token de autorización.",
         responses = {
-            @ApiResponse(responseCode = "204", description = "Sin contenido: Cierre de sesión exitoso"),
-            @ApiResponse(responseCode = "401", description = "No autorizado: Token inválido, cierre de sesión fallido"),
+            @ApiResponse(responseCode = "204", description = "Cierre de sesión exitoso"),
+            @ApiResponse(responseCode = "401", description = "Token inválido, cierre de sesión fallido"),
         }
     )    
     @PostMapping("/logout")    
     public ResponseEntity<Void> logout(
-            @Parameter(name = "token", description = "Token de autorización", required = true, example = "24.433.553.55533.3")
+            @Parameter(name = "token", description = "Token de autorización", required = true, example = "123456789")
             @RequestBody String token) {
         Optional<Boolean> result = usuarioService.logout(token);
-    	
         if (result.isPresent() && result.get()) {
         	return new ResponseEntity<>(HttpStatus.NO_CONTENT);	
         } else {

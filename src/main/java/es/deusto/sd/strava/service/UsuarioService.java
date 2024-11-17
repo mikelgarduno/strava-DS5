@@ -40,7 +40,7 @@ public class UsuarioService {
         Usuario usuario = usuarios.get(email); //Ya hemos comprobado que el usuario existe anteriormente
         if(tipoLogin == TipoLogin.GOOGLE) {
             if (GoogleService.comprobarEmailContrasena(email, password)) {
-                String token = GoogleService.loginToken(email, password);  
+                String token = GoogleService.loginToken(email, password);
                 tokenes.put(token, usuario);    
                 return Optional.of(token);
             } else {
@@ -63,7 +63,6 @@ public class UsuarioService {
     public Optional<Boolean> logout(String token) {
         if (tokenes.containsKey(token)) {
             tokenes.remove(token);
-
             return Optional.of(true);
         } else {
             return Optional.empty();
