@@ -6,11 +6,10 @@ Este proyecto implementa un servidor central que simula la funcionalidad de una 
 
 1. [Descripción General](#descripción-general)
 2. [Requisitos Previos](#requisitos-previos)
-3. [Endpoints](#endpoints)
+3. [Endpoints del API](#endpoints-del-api)
    - [Control de Usuarios](#control-de-usuarios)
    - [Gestión de Retos](#gestión-de-retos)
    - [Gestión de Entrenamientos](#gestión-de-entrenamientos)
-4. [Ejemplo de Uso](#ejemplo-de-uso)
 
 
 ---
@@ -58,23 +57,3 @@ Antes de empezar, asegúrate de tener lo siguiente instalado:
 |------------|---------------------------------------------|------------------------------------------------|------------------------------------------------------------|
 | POST       | `/api/entrenamiento`                       | Crea un nuevo entrenamiento.                  | `titulo`, `deporte`, `distancia`, `fechaInicio`, `token`, etc. |
 | GET        | `/api/entrenamientos/{fechaInicio}/{fechaFin}` | Lista entrenamientos en un rango de fechas.   | `fechaInicio`, `fechaFin`, `token`                         |
-
-Creación de un Reto
-Endpoint: POST /api/reto
-Parámetros de Query:
-
-makefile
-Copiar código
-nombre=Maratón2024
-deporte=Ciclismo
-objetivoDistancia=150
-objetivoTiempo=300
-fechaInicio=2024-11-01
-fechaFin=2024-12-01
-Respuesta Exitosa:
-
-json
-Copiar código
-{
-  "mensaje": "Reto creado exitosamente."
-}
