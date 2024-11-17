@@ -69,7 +69,7 @@ public class UsuarioController {
                         usuarioService.añadirUsuario(usuario);
                         return new ResponseEntity<>("El usuario: \"" + nombre + "\" con email: \"" + credenciales.getEmail() + "\" registrado exitosamente", HttpStatus.OK);
                     } else {
-                        return new ResponseEntity<>("La contrasenya o el email no son correctos",
+                        return new ResponseEntity<>("La contrasenya o el correo no son correctos",
                                 HttpStatus.UNAUTHORIZED);
                     }
                 } catch (Exception e) {
@@ -86,20 +86,27 @@ public class UsuarioController {
         responses = {
             @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, devuelve un token"),
             @ApiResponse(responseCode = "401", description = "No autorizado: Credenciales inválidas, inicio de sesión fallido"),
+            @ApiResponse(responseCode = "500", description = "Error interno en el servidor"),
+            @ApiResponse(responseCode = "409", description = "El usuario no está registrado en el sistema") 
         }
     )
 
     @PostMapping("/login")
     public ResponseEntity<String> login(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Contraseña e email del usuario", required = true)
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Contraseña, email y tipo de login del usuario", required = true)
         @RequestBody UsuarioDTO credenciales) 
         {    
-        Optional<String> token = usuarioService.login(credenciales.getEmail(), credenciales.getContrasenya());
-    	if (token.isPresent()) {
-    		return new ResponseEntity<>(token.get(), HttpStatus.OK);
-    	} else {
-    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    	}
+            if (!usuarioService.existeUsuario(credenciales.getEmail())) {
+                return new ResponseEntity<>("El usuario con el correo: " + credenciales.getEmail() + " no existe, es necesario registrarse",
+                        HttpStatus.CONFLICT);
+            } else {
+                Optional<String> token = usuarioService.login(credenciales.getEmail(), credenciales.getContrasenya(), credenciales.getTipoLogin());
+                if (token.isPresent()) {
+                    return new ResponseEntity<>(token.get(), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("El correo o la contraseña no son correctos",HttpStatus.UNAUTHORIZED);
+                }
+    }
     }
 
     // FUNCION PARA HACER LOGOUT

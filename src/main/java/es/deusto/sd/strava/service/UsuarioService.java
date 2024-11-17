@@ -36,18 +36,25 @@ public class UsuarioService {
 
 
     // LOGIN Y GENERAR TOKEN
-    public Optional<String> login(String email, String password) {
-        Usuario prueba = new Usuario("mikel","mikel@w","10-1-2000",TipoLogin.GOOGLE);
-        usuarios.put(prueba.getEmail(), prueba);
-        //Usuario user = usuarios.get(email);
-        
-        if (prueba != null && GoogleService.comprobarEmailContrasena(email, password)) {
-            String token = GoogleService.loginToken(email, password);  // Generate a random token for the session
-            tokenes.put(token, prueba);     // Store the token and associate it with the user
-
-            return Optional.of(token);
+    public Optional<String> login(String email, String password, TipoLogin tipoLogin) {
+        Usuario usuario = usuarios.get(email); //Ya hemos comprobado que el usuario existe anteriormente
+        if(tipoLogin == TipoLogin.GOOGLE) {
+            if (GoogleService.comprobarEmailContrasena(email, password)) {
+                String token = GoogleService.loginToken(email, password);  
+                tokenes.put(token, usuario);    
+                return Optional.of(token);
+            } else {
+                return Optional.empty();
+            }
         } else {
-        	return Optional.empty();
+            if (MetaService.comprobarEmailContrasena(email, password)) {
+                String token = MetaService.loginToken(email, password);  
+                tokenes.put(token, usuario);     
+    
+                return Optional.of(token);
+            } else {
+                return Optional.empty();
+            }
         }
     }
 
